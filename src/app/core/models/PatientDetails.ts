@@ -1,0 +1,33 @@
+export class PatientDetails {
+  idPaciente!: string;
+  idUsuario!: string;
+  idTipoUsuario!: string;
+  logoGEMP!: string;
+  gemp!: string;
+  sucursal!: string;
+  nombres!: string;
+  primerApellido!: string;
+  segundoApellido!: string;
+  fechaNacimiento!: string;
+  edad!: string;
+  genero!: string;
+  idEntidad!: string;
+  entidadNacimiento!: string;
+  domicilio!: string;
+  idAsentamiento!: string;
+  asentamiento!: string;
+  tipoAsentamiento!: string;
+  idCP!: string;
+  codigoPostal!: string;
+  idMunicipio!: string;
+  municipio!: string;
+  idCiudad!: string;
+  ciudad!: string;
+  entidad!: string;
+  movil!: string;
+  email!: string;
+  status!: string;
+  alergias!: string[];
+  molecules!: string[];
+  patologias!: string[];
+}

@@ -1,0 +1,124 @@
+<nav #navbar class="navbar active">
+  <div class="container-fluid" style="background-color: #00a5b8">
+    <div class="navbar-header">
+      <a class="navbar-brand" routerLink="/">
+        <!--                <img-->
+        <!--                  ngSrc="assets/images/logito2.png"-->
+        <!--                  alt="Logo de la Receta Médica Digital" height="34" width="50"/>-->
+      </a>
+    </div>
+    <div
+      class="collapse navbar-collapse"
+      [ngClass]="isNavbarCollapsed ? '' : 'show'"
+    >
+      <ul class="float-start collapse-menu-icon">
+        <li>
+          <button
+            mat-icon-button
+            (click)="callSidemenuCollapse()"
+            class="sidemenu-collapse nav-notification-icons"
+          >
+            <i class="material-icons-outlined icon-color"> menu </i>
+          </button>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <!-- Full Screen Button -->
+        <li class="fullscreen">
+          <button
+            mat-icon-button
+            class="nav-notification-icons"
+            (click)="callFullscreen()"
+          >
+            <i class="material-icons-outlined icon-color"> fullscreen </i>
+          </button>
+        </li>
+        <!-- #END# Full Screen Button -->
+        <!-- #START# Notifications-->
+        <li>
+          <button
+            mat-icon-button
+            [matMenuTriggerFor]="notificationMenu"
+            class="nav-notification-icons"
+          >
+            <i class="material-icons-outlined icon-color"> apartment </i>
+          </button>
+          <mat-menu #notificationMenu="matMenu" class="nfc-menu">
+            <div class="nfc-header">
+              <h5 class="mb-0">Grupos</h5>
+            </div>
+            <div class="nfc-dropdown">
+              <ng-scrollbar style="height: 350px" visibility="hover">
+                <div class="noti-list header-menu">
+                  <div class="menu">
+                    <div>
+                      @for (grupo of businessGroups; track grupo) {
+                      <button
+                        mat-menu-item
+                        (click)="changeBusinessGroupId(grupo.idGEMP)"
+                        [ngClass]="{
+                          highlight: businessGroupId == grupo.idGEMP
+                        }"
+                      >
+                        <span
+                          class="table-img msg-user"
+                          *ngIf="grupo.logoBase64"
+                        >
+                          <img
+                            [src]="'data:image/png;base64,' + grupo.logoBase64"
+                            alt="{{ grupo.nombre }}"
+                          />
+                        </span>
+                        <span class="menu-info">
+                          <span class="menu-title">{{ grupo.nombre }}</span>
+                        </span>
+                      </button>
+                      }
+                    </div>
+                  </div>
+                </div>
+              </ng-scrollbar>
+            </div>
+          </mat-menu>
+        </li>
+        <!-- #END# Notifications-->
+        <li class="nav-item">
+          <button
+            mat-icon-button
+            [matMenuTriggerFor]="languagemenu"
+            class="lang-dropdown nav-notification-icons"
+          >
+            @if (flagvalue !== undefined) {
+            <img src="{{ flagvalue }}" height="16" />
+            } @if (flagvalue === undefined) {
+            <img src="{{ defaultFlag }}" height="16" />
+            }
+          </button>
+          <mat-menu #languagemenu="matMenu" class="lang-item-menu">
+            @for (item of listLang; track item) {
+            <div class="lang-item">
+              <button
+                mat-menu-item
+                class="dropdown-item lang-item-list"
+                (click)="setLanguage(item.text, item.lang, item.flag)"
+                [ngClass]="{ active: langStoreValue === item.lang }"
+              >
+                <img src="{{ item.flag }}" class="flag-img" height="12" />
+                <span class="align-middle">{{ item.text }}</span>
+              </button>
+            </div>
+            }
+          </mat-menu>
+        </li>
+        <li class="nav-item user_profile">
+          <button mat-button>
+            <div class="chip dropdown-toggle" ngbDropdownToggle class="">
+              <span>{{ userName }}</span>
+            </div>
+          </button>
+        </li>
+        <!-- #END# Tasks -->
+      </ul>
+    </div>
+  </div>
+</nav>

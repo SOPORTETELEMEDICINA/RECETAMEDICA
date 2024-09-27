@@ -1,0 +1,382 @@
+<section class="content">
+  <div class="content-block">
+    <div class="block-header">
+      <!-- breadcrumb -->
+      <app-breadcrumb
+        [title]="'Dashboard'"
+        [items]="[]"
+        [active_item]="'Dashboard'"
+      ></app-breadcrumb>
+    </div>
+    <!-- Widgets -->
+
+    <!-- #END# Widgets -->
+    <div class="row">
+      <div
+        class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12"
+        *ngIf="!isUserDoctor"
+      >
+        <div class="card card-statistic-2">
+          <div class="clearfix">
+            <div class="card-icon shadow-primary bg-purple">
+              <i class="material-icons align-middle">face</i>
+            </div>
+            <div class="card-right">
+              <div>
+                <p class="float-end font-b-500">Pacientes</p>
+              </div>
+              <div class="m-r-10 m-l-10">
+                <h6 class="font-weight-bold float-end mb-0">{{ employees }}</h6>
+              </div>
+            </div>
+          </div>
+          <apx-chart
+            [series]="smallChart1Options.series!"
+            [chart]="smallChart1Options.chart!"
+            [xaxis]="smallChart1Options.xaxis!"
+            [yaxis]="smallChart1Options.yaxis!"
+            [colors]="smallChart1Options.colors!"
+            [stroke]="smallChart1Options.stroke!"
+            [legend]="smallChart1Options.legend!"
+            [tooltip]="smallChart1Options.tooltip!"
+            [dataLabels]="smallChart1Options.dataLabels!"
+          ></apx-chart>
+        </div>
+      </div>
+
+      <div
+        class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12"
+        *ngIf="isUserDoctor"
+      >
+        <div class="card card-statistic-2">
+          <div class="clearfix">
+            <div class="card-icon shadow-primary bg-purple">
+              <i class="material-icons align-middle">face</i>
+            </div>
+            <div class="card-right">
+              <div>
+                <p class="float-end font-b-500">Pacientes</p>
+              </div>
+              <div class="m-r-10 m-l-10">
+                <h6 class="font-weight-bold float-end mb-0">{{ patients }}</h6>
+              </div>
+            </div>
+          </div>
+          <apx-chart
+            [series]="smallChart1Options.series!"
+            [chart]="smallChart1Options.chart!"
+            [xaxis]="smallChart1Options.xaxis!"
+            [yaxis]="smallChart1Options.yaxis!"
+            [colors]="smallChart1Options.colors!"
+            [stroke]="smallChart1Options.stroke!"
+            [legend]="smallChart1Options.legend!"
+            [tooltip]="smallChart1Options.tooltip!"
+            [dataLabels]="smallChart1Options.dataLabels!"
+          ></apx-chart>
+        </div>
+      </div>
+
+      <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card card-statistic-2">
+          <div class="clearfix">
+            <div class="card-icon shadow-primary bg-orange">
+              <i class="material-icons align-middle">content_cut</i>
+            </div>
+            <div class="card-right">
+              <div>
+                <p class="float-end font-b-500">Recetas</p>
+              </div>
+              <div class="m-r-10 m-l-10">
+                <h6 class="font-weight-bold float-end mb-0">
+                  {{ prescriptions }}
+                </h6>
+              </div>
+            </div>
+          </div>
+
+          <apx-chart
+            [series]="smallChart2Options.series!"
+            [chart]="smallChart2Options.chart!"
+            [xaxis]="smallChart2Options.xaxis!"
+            [yaxis]="smallChart2Options.yaxis!"
+            [colors]="smallChart2Options.colors!"
+            [stroke]="smallChart2Options.stroke!"
+            [legend]="smallChart2Options.legend!"
+            [tooltip]="smallChart2Options.tooltip!"
+            [dataLabels]="smallChart2Options.dataLabels!"
+          ></apx-chart>
+        </div>
+      </div>
+
+      <div
+        class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12"
+        *ngIf="isUserDoctor"
+      >
+        <div class="card card-statistic-2">
+          <div class="clearfix">
+            <div
+              class="card-icon shadow-primary bg-green pointer"
+              (click)="openUserModal()"
+            >
+              <i class="material-icons align-middle">person_add</i>
+            </div>
+            <div class="card-right">
+              <div>
+                <p class="float-end font-b-500">Nuevo paciente</p>
+              </div>
+            </div>
+          </div>
+          <apx-chart
+            [series]="smallChart3Options.series!"
+            [chart]="smallChart3Options.chart!"
+            [xaxis]="smallChart3Options.xaxis!"
+            [yaxis]="smallChart3Options.yaxis!"
+            [colors]="smallChart3Options.colors!"
+            [stroke]="smallChart3Options.stroke!"
+            [legend]="smallChart3Options.legend!"
+            [tooltip]="smallChart3Options.tooltip!"
+            [dataLabels]="smallChart3Options.dataLabels!"
+          ></apx-chart>
+        </div>
+      </div>
+
+      <div
+        class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12"
+        *ngIf="!isUserDoctor"
+      >
+        <div class="card card-statistic-2">
+          <div class="clearfix">
+            <div class="card-icon shadow-primary bg-green">
+              <i class="material-icons align-middle">person_add</i>
+            </div>
+            <div class="card-right">
+              <div>
+                <p class="float-end font-b-500">Nuevo empleado</p>
+              </div>
+            </div>
+          </div>
+          <apx-chart
+            [series]="smallChart3Options.series!"
+            [chart]="smallChart3Options.chart!"
+            [xaxis]="smallChart3Options.xaxis!"
+            [yaxis]="smallChart3Options.yaxis!"
+            [colors]="smallChart3Options.colors!"
+            [stroke]="smallChart3Options.stroke!"
+            [legend]="smallChart3Options.legend!"
+            [tooltip]="smallChart3Options.tooltip!"
+            [dataLabels]="smallChart3Options.dataLabels!"
+          ></apx-chart>
+        </div>
+      </div>
+
+      <div
+        class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12"
+        *ngIf="isUserDoctor"
+      >
+        <div class="card card-statistic-2">
+          <div class="clearfix">
+            <div
+              class="card-icon shadow-primary bg-blue pointer"
+              (click)="routeToNewPrescription()"
+            >
+              <i class="material-icons align-middle">local_activity</i>
+            </div>
+            <div class="card-right">
+              <div>
+                <p class="float-end font-b-500">Nueva receta</p>
+              </div>
+            </div>
+          </div>
+          <apx-chart
+            [series]="smallChart4Options.series!"
+            [chart]="smallChart4Options.chart!"
+            [xaxis]="smallChart4Options.xaxis!"
+            [yaxis]="smallChart4Options.yaxis!"
+            [colors]="smallChart4Options.colors!"
+            [stroke]="smallChart4Options.stroke!"
+            [legend]="smallChart4Options.legend!"
+            [tooltip]="smallChart4Options.tooltip!"
+            [dataLabels]="smallChart4Options.dataLabels!"
+          ></apx-chart>
+        </div>
+      </div>
+
+      <div
+        class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12"
+        *ngIf="!isUserDoctor"
+      >
+        <div class="card card-statistic-2">
+          <div class="clearfix">
+            <div class="card-icon shadow-primary bg-blue">
+              <i class="material-icons align-middle">local_activity</i>
+            </div>
+            <div class="card-right">
+              <div>
+                <p class="float-end font-b-500">Surtir receta</p>
+              </div>
+            </div>
+          </div>
+          <apx-chart
+            [series]="smallChart4Options.series!"
+            [chart]="smallChart4Options.chart!"
+            [xaxis]="smallChart4Options.xaxis!"
+            [yaxis]="smallChart4Options.yaxis!"
+            [colors]="smallChart4Options.colors!"
+            [stroke]="smallChart4Options.stroke!"
+            [legend]="smallChart4Options.legend!"
+            [tooltip]="smallChart4Options.tooltip!"
+            [dataLabels]="smallChart4Options.dataLabels!"
+          ></apx-chart>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" style="height: 10px">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="card" style="background-color: #00a5b8"></div>
+      </div>
+    </div>
+
+    <div class="row" *ngIf="isUserDoctor">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="card">
+          <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+              <div class="card">
+                <div class="body">
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <div class="ngxTableHeader">
+                        <ul class="header-buttons-left ms-0 mb-0">
+                          <li class="dropdown m-l-20">
+                            <label for="search-input"
+                              ><i class="material-icons search-icon"
+                                >search</i
+                              ></label
+                            >
+                            <input
+                              placeholder="Buscar"
+                              type="text"
+                              class="browser-default search-field"
+                              (keyup)="filterDatatable($event)"
+                              aria-label="Buscar"
+                            />
+                          </li>
+                        </ul>
+                        <ul class="header-buttons">
+                          <li>
+                            <button
+                              mat-mini-fab
+                              color="primary"
+                              (click)="openUserModal()"
+                            >
+                              <mat-icon>add</mat-icon>
+                            </button>
+                          </li>
+                        </ul>
+                      </div>
+                      <ngx-datatable
+                        #table
+                        class="material"
+                        [rows]="data"
+                        [columns]="columns"
+                        [sortType]="SortType.multi"
+                        [columnMode]="'force'"
+                        [headerHeight]="50"
+                        [footerHeight]="50"
+                        [rowHeight]="80"
+                        [limit]="10"
+                      >
+                        <ngx-datatable-column prop="nombres" name="Nombre">
+                          <ng-template
+                            let-value="value"
+                            let-row="row"
+                            let-rowIndex="rowIndex"
+                            ngx-datatable-cell-template
+                          >
+                            <strong>{{ row.nombres }} {{ row.primerApellido }}
+                              {{ row.segundoApellido }}</strong>
+                            <br />
+                            <em style="font-size: 13px">{{ row.genero }}</em>
+                            <br />
+                            <em style="font-size: 13px">{{ row.edad }} años</em>
+                          </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column
+                          prop="fechaNacimiento"
+                          name="Fecha de Nacimiento"
+                        ></ngx-datatable-column>
+
+                        <ngx-datatable-column prop="email" name="Correo">
+                          <ng-template
+                            let-value="value"
+                            let-row="row"
+                            let-rowIndex="rowIndex"
+                            ngx-datatable-cell-template
+                          >
+                            <a href="mailto:{{ row.email }}">{{ row.email }}</a>
+                          </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column
+                          prop="movil"
+                          name="Telefono"
+                        ></ngx-datatable-column>
+
+                        <ngx-datatable-column prop="status" name="Estatus">
+                          <ng-template
+                            let-value="value"
+                            let-row="row"
+                            let-rowIndex="rowIndex"
+                            ngx-datatable-cell-template
+                          >
+                            <div
+                              [ngClass]="{
+                                  'badge col-red': row.status == 'Inactivo',
+                                  'badge col-green': row.status == 'Activo'
+                                }"
+                            >
+                              {{ row.status }}
+                            </div>
+                          </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column
+                          name="Acciones"
+                          [sortable]="false"
+                          [width]="120"
+                        >
+                          <ng-template
+                            let-value="value"
+                            let-row="row"
+                            let-rowIndex="rowIndex"
+                            ngx-datatable-cell-template
+                          >
+                            <button mat-icon-button class="tbl-action-btn">
+                              <app-feather-icons
+                                [icon]="'edit'"
+                                [class]="'tbl-fav-edit'"
+                              ></app-feather-icons>
+                            </button>
+                            <button mat-icon-button class="tbl-action-btn">
+                              <app-feather-icons
+                                [icon]="'trash-2'"
+                                [class]="'tbl-fav-delete'"
+                              ></app-feather-icons>
+                            </button>
+                          </ng-template>
+                        </ngx-datatable-column>
+                      </ngx-datatable>
+                      <!-- Add Record Modal Window -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

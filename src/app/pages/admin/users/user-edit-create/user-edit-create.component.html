@@ -1,0 +1,439 @@
+<div>
+  <h2 mat-dialog-title>{{ user.idUsuario ? "Editar" : "Crear" }} usuario</h2>
+  <div mat-dialog-content>
+    <form #form="ngForm">
+      <div class="row m-t-10">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Tipo de usuario</mat-label>
+            <mat-select
+              name="usertype"
+              [(ngModel)]="user.idTipoUsuario"
+              #usertype="ngModel"
+              required
+              matInput
+            >
+              <mat-option
+                value="{{ row.idTipoUsuario }}"
+                *ngFor="let row of userTypes"
+                >{{ row.nombre }}</mat-option
+              >
+            </mat-select>
+
+            <mat-error *ngIf="usertype.hasError('required')"
+              >El nombre es requerido
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Usuario</mat-label>
+            <input
+              name="username"
+              [(ngModel)]="user.usr"
+              #username="ngModel"
+              matInput
+              required
+            />
+
+            <mat-error *ngIf="username.hasError('required')"
+              >El usuario es requerido
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-xl-6 col-lg- col-md-6 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Correo electronico</mat-label>
+            <input
+              name="email"
+              [(ngModel)]="user.email"
+              #email="ngModel"
+              matInput
+              required
+              email
+            />
+
+            <mat-error *ngIf="email.hasError('required')"
+              >El nombre es requerido
+            </mat-error>
+
+            <mat-error *ngIf="email.hasError('email')"
+              >Proporciona una dirección de correo electronico valida
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Contraseña</mat-label>
+            <input
+              type="password"
+              name="password"
+              [(ngModel)]="user.password"
+              #password="ngModel"
+              matInput
+              required
+            />
+
+            <mat-error *ngIf="password.hasError('required')"
+              >El nombre es requerido
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <div class="row m-t-20">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Nombre (s)</mat-label>
+            <input
+              name="username"
+              [(ngModel)]="user.nombres"
+              #username="ngModel"
+              required
+              matInput
+            />
+
+            <mat-error *ngIf="username.hasError('required')"
+              >El nombre es requerido
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Apellido paterno</mat-label>
+            <input
+              name="userlastname"
+              [(ngModel)]="user.primerApellido"
+              #userlastname="ngModel"
+              matInput
+              required
+            />
+            <mat-error *ngIf="userlastname.hasError('required')"
+              >El apellido paterno es requerido
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Apellido materno</mat-label>
+            <input
+              name="usersurname"
+              [(ngModel)]="user.segundoApellido"
+              #usersurname="ngModel"
+              matInput
+              required=""
+            />
+            <mat-error *ngIf="usersurname.hasError('required')"
+              >El apellido materno es requerido
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Télefono móvil</mat-label>
+            <input
+              name="phone"
+              [(ngModel)]="user.movil"
+              #phone="ngModel"
+              maxlength="10"
+              matInput
+              required
+            />
+            <mat-error *ngIf="phone.hasError('required')"
+              >El telefono es requerido
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Dirección</mat-label>
+            <textarea
+              name="address"
+              [(ngModel)]="user.domicilio"
+              #address="ngModel"
+              matInput
+              required
+            ></textarea>
+            <mat-error *ngIf="address.hasError('required')"
+              >La dirección es requerida
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <div class="row m-t-20">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Asentamiento</mat-label>
+            <input
+              type="text"
+              name="settlement"
+              [(ngModel)]="settlementSearch"
+              [matAutocomplete]="auto"
+              (keydown)="searchSettlementsByKeyPress()"
+              matInput
+            />
+            <mat-autocomplete
+              #auto="matAutocomplete"
+              [displayWith]="displayFn"
+              (optionSelected)="setSelectedSettlement($event.option.value)"
+            >
+              @for (option of settlements; track option) {
+              <mat-option [value]="option">
+                {{ option.nombreAsentamiento }}
+              </mat-option>
+              }
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row m-t-20">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Grupo empresarial</mat-label>
+            <mat-select
+              name="gemp"
+              [(ngModel)]="user.idGEMP"
+              #gemp="ngModel"
+              (selectionChange)="getBranchesByGemp()"
+              matInput
+              required
+            >
+              <mat-option
+                value="{{ row.idGEMP }}"
+                *ngFor="let row of businessGroups"
+                >{{ row.nombre }}</mat-option
+              >
+            </mat-select>
+            <mat-error *ngIf="gemp.hasError('required')"
+              >El grupo empresarial es requerido
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row m-t-20">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Sucursal</mat-label>
+            <mat-select
+              name="branch"
+              [(ngModel)]="user.idSucursal"
+              #branch="ngModel"
+              matInput
+              required
+            >
+              <mat-option
+                value="{{ row.idSucursal }}"
+                *ngFor="let row of branches"
+                >{{ row.nombre }}</mat-option
+              >
+            </mat-select>
+            <mat-error *ngIf="branch.hasError('required')"
+              >La sucursal es requerida
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <ng-container *ngIf="user.idTipoUsuario == UserRole.Medico">
+        <mat-divider></mat-divider>
+
+        <div class="row m-t-20">
+          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>Cedula general</mat-label>
+              <input
+                name="doctor-general-professional-licence"
+                [(ngModel)]="doctor.cedulaGeneral"
+                #professionallicence="ngModel"
+                matInput
+                [required]="user.idTipoUsuario == UserRole.Medico"
+              />
+
+              <mat-error *ngIf="professionallicence.hasError('required')"
+                >La cedula general es requerida
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>Universidad</mat-label>
+              <input
+                name="doctor-general-university"
+                [(ngModel)]="doctor.universidad"
+                #university="ngModel"
+                matInput
+                [required]="user.idTipoUsuario == UserRole.Medico"
+              />
+
+              <mat-error *ngIf="university.hasError('required')"
+                >La universidad es requerida
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>Especialidad</mat-label>
+              <input
+                name="doctor-general-specialty"
+                [(ngModel)]="doctor.especialidad"
+                #specialty="ngModel"
+                matInput
+                [required]="user.idTipoUsuario == UserRole.Medico"
+              />
+
+              <mat-error *ngIf="specialty.hasError('required')"
+                >La especialidad es requerida
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>Cedula especialidad</mat-label>
+              <input
+                name="doctor-general-professional-licence-specialty"
+                [(ngModel)]="doctor.cedulaEspecialidad"
+                #professionallicencespecialty="ngModel"
+                matInput
+                [required]="user.idTipoUsuario == UserRole.Medico"
+              />
+
+              <mat-error
+                *ngIf="professionallicencespecialty.hasError('required')"
+                >La cedula de la especialidad es requerida
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>Horario</mat-label>
+              <input
+                name="doctor-general-schedule"
+                [(ngModel)]="doctor.horario"
+                #schedule="ngModel"
+                matInput
+                [required]="user.idTipoUsuario == UserRole.Medico"
+              />
+
+              <mat-error *ngIf="schedule.hasError('required')"
+                >El horario es requerido
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="user.idTipoUsuario == UserRole.Paciente">
+        <mat-divider></mat-divider>
+
+        <div class="row m-t-20">
+          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>Entidad de nacimiento</mat-label>
+              <mat-select
+                name="patient-birth-city"
+                [(ngModel)]="patient.idEntidadNacimiento"
+                #patientbirthcity="ngModel"
+                [required]="user.idTipoUsuario == UserRole.Paciente"
+                matInput
+              >
+                <mat-option
+                  value="{{ row.idEntidad }}"
+                  *ngFor="let row of federalEntity"
+                  >{{ row.nombre }}</mat-option
+                >
+              </mat-select>
+
+              <mat-error *ngIf="patientbirthcity.hasError('required')"
+                >La entidad de nacimiento es requerida
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Genero</mat-label>
+            <input
+              name="patient-gender"
+              [(ngModel)]="patient.genero"
+              #patientgender="ngModel"
+              matInput
+              [required]="user.idTipoUsuario == UserRole.Paciente"
+            />
+
+            <mat-error *ngIf="patientgender.hasError('required')"
+              >El genero es requerido
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Fecha de Nacimiento</mat-label>
+            <input
+              name="patient-gender"
+              [(ngModel)]="patient.fechaNacimiento"
+              #patientfecha="ngModel"
+              matInput
+              [required]="user.idTipoUsuario == UserRole.Paciente"
+            />
+
+            <mat-error *ngIf="patientfecha.hasError('required')"
+              >La fecha de Nacimiento es requerida
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </ng-container>
+
+      <div class="btn-sec m-t-30">
+        <button
+          class="btn-space"
+          mat-raised-button
+          color="primary"
+          [disabled]="!form.valid"
+          (click)="createUpdateUser()"
+        >
+          {{ user.idUsuario ? "Editar" : "Crear" }} usuario
+        </button>
+        <button type="button" mat-button (click)="closeDialog()">
+          Cancelar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

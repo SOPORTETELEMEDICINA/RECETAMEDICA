@@ -1,0 +1,283 @@
+<section class="content">
+  <div class="content-block">
+    <div class="block-header">
+      <!-- breadcrumb -->
+      <app-breadcrumb
+        [title]="'Receta'"
+        [items]="[]"
+        [active_item]="'Receta'"
+      ></app-breadcrumb>
+    </div>
+    <!-- Widgets -->
+    <div class="row" style="height: 10px">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="card" style="background-color: #00a5b8"></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="card">
+          <div class="header">
+            <h2>Perfil del paciente</h2>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-lg-3 col-xl-3 col-md-6 col-sm-6">
+<!--                <mat-form-field class="example-full-width" appearance="outline">-->
+<!--                  <mat-label>Selecciona el sexo del paciente</mat-label>-->
+<!--                  <mat-select name="gemp" matInput> </mat-select>-->
+<!--                </mat-form-field>-->
+                <mat-form-field class="example-full-width">
+                  <mat-label>Sexo del paciente</mat-label>
+                  <select matNativeControl required>
+                    <option value="f">Femenino</option>
+                    <option value="m">Masculino</option>
+                  </select>
+                </mat-form-field>
+              </div>
+
+              <div class="col-lg-3 col-xl-3 col-md-6 col-sm-6">
+                <mat-form-field class="example-full-width" appearance="outline">
+                  <mat-label>Ingresa la edad del paciente en años</mat-label>
+                  <input name="phone" matInput />
+                </mat-form-field>
+              </div>
+
+              <div class="col-lg-3 col-xl-3 col-md-6 col-sm-6">
+                <mat-form-field class="example-full-width" appearance="outline">
+                  <mat-label>Ingresa el peso del paciente en kg</mat-label>
+                  <input name="phone" matInput />
+                </mat-form-field>
+              </div>
+
+              <div class="col-lg-3 col-xl-3 col-md-6 col-sm-6">
+                <mat-form-field class="example-full-width" appearance="outline">
+                  <mat-label>Ingresa la altura del paciente en cm</mat-label>
+                  <input name="phone" matInput />
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12">
+                <section class="example-list-section">
+                  <mat-checkbox color="primary">Lactancia</mat-checkbox>
+                  <mat-checkbox color="primary">Embarazo</mat-checkbox>
+                </section>
+              </div>
+
+              <div class="col-lg-4 col-xl-4 col-md-6 col-sm-6">
+                <mat-form-field class="example-full-width" appearance="outline">
+                  <mat-label>Ingresa amenorra en semanas</mat-label>
+                  <input name="phone" matInput />
+                </mat-form-field>
+              </div>
+
+              <div class="col-lg-4 col-xl-4 col-md-6 col-sm-6">
+                <mat-form-field class="example-full-width" appearance="outline">
+                  <mat-label
+                    >Ingresa el aclaramiento creatinina en ml/min</mat-label
+                  >
+                  <input name="phone" matInput />
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="row m-t-20">
+              <div class="col-lg-4 col-xl-4 col-md-6 col-sm-6 border-right">
+                <div class="row">
+                  <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
+                    <h5 class="align-center border-botton-color">Patologías</h5>
+                  </div>
+
+                  <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12 m-t-20">
+                    <mat-form-field
+                      class="example-full-width"
+                      appearance="outline"
+                    >
+                      <mat-label>Buscar patologias</mat-label>
+                      <input
+                        name="patient-patology"
+                        [(ngModel)]="searchPatologies"
+                        (keydown)="searchPatologiesByKeyPress()"
+                        [matAutocomplete]="autocompletepatology"
+                        matInput
+                      />
+                      <mat-autocomplete
+                        #autocompletepatology="matAutocomplete"
+                        [displayWith]="displayFn"
+                        (optionSelected)="
+                          setSelectedPatology($event.option.value)
+                        "
+                      >
+                        @for (option of patologies; track option) {
+                        <mat-option [value]="option">
+                          {{ option.name }}
+                        </mat-option>
+                        }
+                      </mat-autocomplete>
+                    </mat-form-field>
+                  </div>
+
+                  <p class="border-botton"></p>
+
+                  <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12 m-t-20">
+                    <mat-list>
+                      <mat-list-item *ngFor="let row of patient.patologias">{{
+                        row
+                      }}</mat-list-item>
+                    </mat-list>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-4 col-xl-4 col-md-6 col-sm-6 border-right">
+                <div class="row">
+                  <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
+                    <h5 class="align-center border-botton-color">Alergias</h5>
+                  </div>
+
+                  <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12 m-t-20">
+                    <mat-form-field
+                      class="example-full-width"
+                      appearance="outline"
+                    >
+                      <mat-label>Buscar alergias</mat-label>
+                      <input
+                        name="search-allergy"
+                        [(ngModel)]="searchAllergies"
+                        (keydown)="searchAllergiesByKeyPress()"
+                        [matAutocomplete]="autocompleteallergies"
+                        matInput
+                      />
+                      <mat-autocomplete
+                        #autocompleteallergies="matAutocomplete"
+                        [displayWith]="displayFn"
+                        (optionSelected)="
+                          setSelectedAllergy($event.option.value)
+                        "
+                      >
+                        @for (option of allergies; track option) {
+                        <mat-option [value]="option">
+                          {{ option.name }}
+                        </mat-option>
+                        }
+                      </mat-autocomplete>
+                    </mat-form-field>
+                  </div>
+
+                  <p class="border-botton"></p>
+
+                  <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12 m-t-20">
+                    <mat-list>
+                      <mat-list-item *ngFor="let row of patient.alergias">{{
+                        row
+                      }}</mat-list-item>
+                    </mat-list>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-4 col-xl-4 col-md-6 col-sm-6">
+                <div class="row">
+                  <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
+                    <h5 class="align-center border-botton-color">Moleculas</h5>
+                  </div>
+
+                  <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12 m-t-20">
+                    <mat-form-field
+                      class="example-full-width"
+                      appearance="outline"
+                    >
+                      <mat-label>Buscar molesculas</mat-label>
+                      <input
+                        name="patient-molescules"
+                        [(ngModel)]="searchMolescule"
+                        (keydown)="searchMolesculesByKeyPress()"
+                        [matAutocomplete]="autocompletemolescules"
+                        matInput
+                      />
+
+                      <mat-autocomplete
+                        #autocompletemolescules="matAutocomplete"
+                        [displayWith]="displayFn"
+                        (optionSelected)="
+                          setSelectedMolecule($event.option.value)
+                        "
+                      >
+                        @for (option of molescules; track option) {
+                        <mat-option [value]="option">
+                          {{ option.name }}
+                        </mat-option>
+                        }
+                      </mat-autocomplete>
+                    </mat-form-field>
+                  </div>
+
+                  <p class="border-botton"></p>
+
+                  <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12 m-t-20">
+                    <mat-list>
+                      <mat-list-item *ngFor="let row of patient.molecules">{{
+                        row
+                      }}</mat-list-item>
+                    </mat-list>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row m-t-20">
+              <div class="col-lg-4 col-xl-4 col-md-6 col-sm-6 border-right">
+                <div class="row">
+                  <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
+                    <h5 class="align-center border-botton-color">Medicamentos</h5>
+                  </div>
+
+                  <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12 m-t-20">
+                    <mat-form-field
+                      class="example-full-width"
+                      appearance="outline"
+                    >
+                      <mat-label>Buscar medicamentos</mat-label>
+                      <input
+                        name="patient-patology"
+                        [(ngModel)]="searchPatologies"
+                        (keydown)="searchPatologiesByKeyPress()"
+                        [matAutocomplete]="autocompletepatology"
+                        matInput
+                      />
+                      <mat-autocomplete
+                        #autocompletepatology="matAutocomplete"
+                        [displayWith]="displayFn"
+                        (optionSelected)="
+                          setSelectedPatology($event.option.value)
+                        "
+                      >
+                        @for (option of patologies; track option) {
+                          <mat-option [value]="option">
+                            {{ option.name }}
+                          </mat-option>
+                        }
+                      </mat-autocomplete>
+                    </mat-form-field>
+                  </div>
+
+                  <p class="border-botton"></p>
+
+                  <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12 m-t-20">
+                    <mat-list>
+                      <mat-list-item *ngFor="let row of patient.patologias">{{
+                          row
+                        }}</mat-list-item>
+                    </mat-list>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,20 @@
+.example-list-section {
+    display: flex;
+    flex-direction: column; /* Alinea los elementos en columna (vertical) */
+}
+
+.border-botton-color {
+    width: 95%; /* El h5 ocupará el 90% del ancho del contenedor padre */
+    margin: 0 auto; /* Centra el h5 dentro del contenedor */
+    border-bottom: 2px solid #64b2ae; /* Borde alrededor del h5 */
+}
+
+.border-botton {
+    width: 92%; /* El h5 ocupará el 90% del ancho del contenedor padre */
+    margin: 0 auto; /* Centra el h5 dentro del contenedor */
+    border-bottom: 2px solid #dfdfdf; /* Borde alrededor del h5 */
+}
+
+.border-right {
+    border-right: 2px solid #dfdfdf; /* Borde alrededor del h5 */
+}
