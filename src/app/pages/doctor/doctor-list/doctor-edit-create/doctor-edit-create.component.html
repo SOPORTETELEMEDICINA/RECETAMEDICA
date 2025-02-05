@@ -1,1 +1,444 @@
-<p>doctor-edit-create works!</p>
+<!--suppress AngularNgOptimizedImage -->
+<section class="content">
+  <div class="content-block">
+    <div class="block-header">
+      <app-breadcrumb [active_item]="'Crear'" [title]="'Medico'"></app-breadcrumb>
+    </div>
+    <div class="row clearfix">
+      <div class="col-lg-4 col-md-12">
+        <div class="card">
+          <div class="m-b-20">
+            <div class="contact-grid">
+              <div class="profile-header" style="background-color: #003359">
+                <div class="user-name">{{ param ? 'Editar' : 'Nuevo' }} Médico</div>
+              </div>
+              <img alt="" class="user-img" src="{{userImg}}">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-8 col-md-12">
+        <div class="card">
+          <mat-tab-group>
+
+            <mat-tab>
+              <ng-template mat-tab-label>
+                <mat-icon class="example-tab-icon msr-2">face</mat-icon>
+                Datos generales
+              </ng-template>
+              <form [formGroup]="userForm" class="register-form m-4">
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field appearance="outline" class="example-full-width">
+                      <mat-label>Usuario</mat-label>
+                      <input
+                        aria-autocomplete="none"
+                        autocomplete="nope"
+                        formControlName="usr"
+                        matInput
+                        required
+                      />
+                      @if (userForm.get('usr')?.hasError('required')) {
+                        <mat-error>{{ getErrorMessage() }}</mat-error>
+                      }
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-xl-6 col-lg- col-md-6 col-sm-12 mb-2">
+                    <mat-form-field appearance="outline" class="example-full-width">
+                      <mat-label>Correo electronico</mat-label>
+                      <input
+                        aria-autocomplete="none"
+                        autocomplete="nope"
+                        email
+                        formControlName="email"
+                        matInput
+                        required
+                      />
+                      @if (userForm.get('email')?.hasError('email')) {
+                        <mat-error>{{ getErrorMessage() }}</mat-error>
+                      }
+                      @if (userForm.get('email')?.hasError('required')) {
+                        <mat-error>{{ getErrorMessage() }}</mat-error>
+                      }
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div *ngIf="!param" class="row">
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field appearance="outline" class="example-full-width">
+                      <mat-label>Contraseña</mat-label>
+                      <input
+                        [required]="!param"
+                        aria-autocomplete="none"
+                        autocomplete="nope"
+                        formControlName="password"
+                        matInput
+                        type="password"
+                      />
+                      @if (userForm.get('password')?.hasError('required')) {
+                        <mat-error>{{ getErrorMessage() }}</mat-error>
+                      }
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <mat-divider/>
+
+                <div class="row m-t-20">
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field appearance="outline" class="example-full-width">
+                      <mat-label>Nombre (s)</mat-label>
+                      <input
+                        appUppercaseNoAccent
+                        aria-autocomplete="none"
+                        autocomplete="nope"
+                        formControlName="nombres"
+                        matInput
+                        required
+                      />
+                      @if (userForm.get('nombres')?.hasError('required')) {
+                        <mat-error>{{ getErrorMessage() }}</mat-error>
+                      }
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field appearance="outline" class="example-full-width">
+                      <mat-label>Apellido paterno</mat-label>
+                      <input
+                        appUppercaseNoAccent
+                        aria-autocomplete="none"
+                        autocomplete="nope"
+                        formControlName="primerApellido"
+                        matInput
+                        required
+                      />
+                      @if (userForm.get('primerApellido')?.hasError('required')) {
+                        <mat-error>{{ getErrorMessage() }}</mat-error>
+                      }
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field appearance="outline" class="example-full-width">
+                      <mat-label>Apellido materno</mat-label>
+                      <input
+                        appUppercaseNoAccent
+                        aria-autocomplete="none"
+                        autocomplete="nope"
+                        formControlName="segundoApellido"
+                        matInput
+                        required
+                      />
+                      @if (userForm.get('segundoApellido')?.hasError('required')) {
+                        <mat-error>{{ getErrorMessage() }}</mat-error>
+                      }
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field appearance="outline" class="example-full-width">
+                      <mat-label>Télefono móvil</mat-label>
+                      <input
+                        appUppercaseNoAccent
+                        aria-autocomplete="none"
+                        autocomplete="nope"
+                        formControlName="movil"
+                        matInput
+                        required
+                      />
+                      @if (userForm.get('movil')?.hasError('required')) {
+                        <mat-error>{{ getErrorMessage() }}</mat-error>
+                      }
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field appearance="outline" class="example-full-width">
+                      <mat-label>Dirección</mat-label>
+                      <textarea
+                        appUppercaseNoAccent
+                        aria-autocomplete="none"
+                        autocomplete="nope"
+                        formControlName="domicilio"
+                        matInput
+                        required
+                      ></textarea>
+                      @if (userForm.get('domicilio')?.hasError('required')) {
+                        <mat-error>{{ getErrorMessage() }}</mat-error>
+                      }
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <mat-divider/>
+
+                <div class="row m-t-20">
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field appearance="outline" class="example-full-width">
+                      <mat-label>Asentamiento</mat-label>
+                      <input
+                        (keydown)="searchSettlementsByKeyPress($event)"
+                        [(ngModel)]="settlementSearch"
+                        [matAutocomplete]="auto"
+                        aria-autocomplete="none"
+                        autocomplete="nope"
+                        formControlName="settlementSearch"
+                        matInput
+                        name="settlement"
+                        type="text"
+                      />
+                      <mat-autocomplete
+                        #auto="matAutocomplete"
+                        (optionSelected)="setSelectedSettlement($event.option.value)"
+                        [displayWith]="displayFn"
+                      >
+                        @for (option of settlements; track option) {
+                          <mat-option [value]="option">
+                            {{ option.asentamiento }}, {{ option.estado }} - CP: {{ option.codigoPostal }}
+                          </mat-option>
+                        }
+                      </mat-autocomplete>
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div class="row m-t-20">
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field appearance="outline" class="example-full-width">
+                      <mat-label>Grupo empresarial</mat-label>
+                      <mat-select
+                        (selectionChange)="getBranchesByGemp()"
+                        formControlName="idGEMP"
+                        required
+                      >
+                        <mat-option
+                          *ngFor="let row of businessGroups"
+                          value="{{ row.idGEMP }}"
+                        >{{ row.nombre }}
+                        </mat-option
+                        >
+                      </mat-select>
+                      @if (userForm.get('idGEMP')?.hasError('required')) {
+                        <mat-error>{{ getErrorMessage() }}</mat-error>
+                      }
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div class="row m-t-20">
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field appearance="outline" class="example-full-width">
+                      <mat-label>Sucursal</mat-label>
+                      <mat-select
+                        formControlName="idSucursal"
+                        required
+                      >
+                        <mat-option
+                          *ngFor="let row of branches"
+                          value="{{ row.idSucursal }}"
+                        >{{ row.nombre }}
+                        </mat-option
+                        >
+                      </mat-select>
+                      @if (userForm.get('idSucursal')?.hasError('required')) {
+                        <mat-error>{{ getErrorMessage() }}</mat-error>
+                      }
+                    </mat-form-field>
+                  </div>
+                </div>
+                <mat-divider/>
+              </form>
+
+              <form [formGroup]="doctorForm" class="register-form m-4">
+                <div class="row m-t-20">
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field appearance="outline" class="example-full-width">
+                      <mat-label>Cedula general</mat-label>
+                      <input
+                        appUppercaseNoAccent
+                        aria-autocomplete="none"
+                        autocomplete="nope"
+                        formControlName="cedulaGeneral"
+                        matInput
+                        required
+                      />
+                      @if (doctorForm.get('cedulaGeneral')?.hasError('required')) {
+                        <mat-error>{{ getErrorMessage() }}</mat-error>
+                      }
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field appearance="outline" class="example-full-width">
+                      <mat-label>Universidad</mat-label>
+                      <input
+                        appUppercaseNoAccent
+                        aria-autocomplete="none"
+                        autocomplete="nope"
+                        formControlName="universidad"
+                        matInput
+                        required
+                      />
+                      @if (doctorForm.get('universidad')?.hasError('required')) {
+                        <mat-error>{{ getErrorMessage() }}</mat-error>
+                      }
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field appearance="outline" class="example-full-width">
+                      <mat-label>Especialidad</mat-label>
+                      <input
+                        appUppercaseNoAccent
+                        aria-autocomplete="none"
+                        autocomplete="nope"
+                        formControlName="especialidad"
+                        matInput
+                      />
+                      <!--                      @if (doctorForm.get('especialidad')?.hasError('required')) {-->
+                      <!--                        <mat-error>{{ getErrorMessage() }}</mat-error>-->
+                      <!--                      }-->
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field appearance="outline" class="example-full-width">
+                      <mat-label>Cedula especialidad</mat-label>
+                      <input
+                        appUppercaseNoAccent
+                        aria-autocomplete="none"
+                        autocomplete="nope"
+                        formControlName="cedulaEspecialidad"
+                        matInput
+                      />
+                      <!--                      @if (doctorForm.get('cedulaEspecialidad')?.hasError('required')) {-->
+                      <!--                        <mat-error>{{ getErrorMessage() }}</mat-error>-->
+                      <!--                      }-->
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field appearance="outline" class="example-full-width">
+                      <mat-label>Horario</mat-label>
+                      <input
+                        appUppercaseNoAccent
+                        aria-autocomplete="none"
+                        autocomplete="nope"
+                        formControlName="horario"
+                        matInput
+                        required
+                      />
+                      @if (doctorForm.get('horario')?.hasError('required')) {
+                        <mat-error>{{ getErrorMessage() }}</mat-error>
+                      }
+                    </mat-form-field>
+                  </div>
+                </div>
+              </form>
+
+            </mat-tab>
+
+            <mat-tab>
+              <ng-template mat-tab-label>
+                <mat-icon class="example-tab-icon msr-2">settings</mat-icon>
+                Configuracion
+              </ng-template>
+              <form [formGroup]="archiveForm" class="register-form m-4">
+                <div class="row">
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                    <div class="card">
+                      <div class="header">
+                        <h2>Imagen de usuario</h2>
+                      </div>
+                      <div class="body">
+                        <div class="example-container">
+                          <div class="row">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-5">
+                              <label>Subir</label>
+                              <app-file-upload [acceptedTypes]="'image/*'" formControlName="imagen"></app-file-upload>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                    <div class="card">
+                      <div class="header">
+                        <h2>Firma</h2>
+                      </div>
+                      <div class="body">
+                        <div class="example-container">
+                          <div class="row">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-5">
+                              <label>Subir</label>
+                              <app-file-upload [acceptedTypes]="'image/*'"
+                                               formControlName="firma"></app-file-upload>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                    <div class="card">
+                      <div class="header">
+                        <h2>PDF</h2>
+                      </div>
+                      <div class="body">
+                        <div class="example-container">
+                          <div class="row">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-5">
+                              <label>Subir</label>
+                              <app-file-upload [acceptedTypes]="'application/pdf'"
+                                               formControlName="pdf"></app-file-upload>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </mat-tab>
+          </mat-tab-group>
+
+          <button (click)="confirmAdd()"
+                  [disabled]="!userForm.valid || !doctorForm.valid"
+                  [ngClass]="{
+          'button-custom': true,
+          'disabled': !userForm.valid || !doctorForm.valid
+        }"
+                  color="primary"
+                  mat-button>
+            {{ !userForm.valid || !doctorForm.valid ? 'Formulario Incompleto' : param ? 'Editar usuario' : 'Crear usuario' }}
+          </button>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

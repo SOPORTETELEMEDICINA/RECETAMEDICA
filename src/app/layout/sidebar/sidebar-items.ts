@@ -1,5 +1,6 @@
-import { UserRole } from '@core/models/Enums/UserRole';
-import { RouteInfo } from './sidebar.metadata';
+import {UserRole} from '@core/models/Enums/UserRole';
+import {RouteInfo} from './sidebar.metadata';
+
 export const ROUTES: RouteInfo[] = [
   {
     path: '',
@@ -13,10 +14,9 @@ export const ROUTES: RouteInfo[] = [
     role: ['All'],
     submenu: [],
   },
-
   {
     path: 'dashboard',
-    title: 'Dashboard',
+    title: 'Inicio',
     iconType: 'material-icons-outlined',
     icon: 'space_dashboard',
     class: '',
@@ -26,20 +26,6 @@ export const ROUTES: RouteInfo[] = [
     role: ['All'],
     submenu: [],
   },
-
-  {
-    path: 'branch/branch-list',
-    title: 'Sucursales',
-    iconType: 'material-icons-outlined',
-    icon: 'location_city',
-    class: '',
-    groupTitle: false,
-    badge: '',
-    badgeClass: '',
-    role: [UserRole.Admin, UserRole.Supervisor_Sucursales],
-    submenu: [],
-  },
-
   {
     path: 'patient/patient-list',
     title: 'Pacientes',
@@ -49,10 +35,12 @@ export const ROUTES: RouteInfo[] = [
     groupTitle: false,
     badge: '',
     badgeClass: '',
-    role: [UserRole.Admin, UserRole.Medico],
+    role: [
+      UserRole.Admin,
+      UserRole.Medico,
+    ],
     submenu: [],
   },
-
   {
     path: 'prescription/prescription-list',
     title: 'Recetas',
@@ -62,10 +50,79 @@ export const ROUTES: RouteInfo[] = [
     groupTitle: false,
     badge: '',
     badgeClass: '',
-    role: [UserRole.Admin, UserRole.Medico, UserRole.Paciente],
+    role: [UserRole.Admin, UserRole.Medico],
+    submenu: [
+      // {
+      //   path: 'prescription/prescription-list',
+      //   title: 'Lista',
+      //   iconType: 'material-icons-outlined',
+      //   icon: 'description',
+      //   class: '',
+      //   groupTitle: false,
+      //   badge: '',
+      //   badgeClass: '',
+      //   role: ['All'],
+      //   submenu: [],
+      // },
+      // {
+      //   path: 'prescription/prescription-supply',
+      //   title: 'Surtir',
+      //   iconType: 'material-icons-outlined',
+      //   icon: 'done_outline',
+      //   class: '',
+      //   groupTitle: false,
+      //   badge: '',
+      //   badgeClass: '',
+      //   role: ['All'],
+      //   submenu: [],
+      // },
+    ],
+  },
+  {
+    path: 'prescription/prescription-supply',
+    title: 'Surtir Receta',
+    iconType: 'material-icons-outlined',
+    icon: 'done_outline',
+    class: '',
+    groupTitle: false,
+    badge: '',
+    badgeClass: '',
+    role: [
+      UserRole.Admin,
+      UserRole.Empleado_Farmacia, UserRole.Supervisor_Sucursales, UserRole.Responsable_Farmacia,
+    ],
     submenu: [],
   },
-
+  {
+    path: '',
+    title: 'Administración',
+    iconType: '',
+    icon: '',
+    class: '',
+    groupTitle: true,
+    badge: '',
+    badgeClass: '',
+    role: [
+      UserRole.Admin, UserRole.Supervisor_Sucursales,
+      UserRole.Responsable_Farmacia
+    ],
+    submenu: [],
+  },
+  {
+    path: 'admin/user-list',
+    title: 'Personal',
+    iconType: 'material-icons-outlined',
+    icon: 'group',
+    class: '',
+    groupTitle: false,
+    badge: '',
+    badgeClass: '',
+    role: [
+      UserRole.Admin, UserRole.Supervisor_Sucursales,
+      UserRole.Responsable_Farmacia
+    ],
+    submenu: [],
+  },
   {
     path: 'doctor/doctor-list',
     title: 'Medicos',
@@ -77,31 +134,40 @@ export const ROUTES: RouteInfo[] = [
     badgeClass: '',
     role: [
       UserRole.Admin,
-      UserRole.Empleado_Farmacia,
-      UserRole.Responsable_Farmacia,
-      UserRole.Supervisor_Sucursales,
+      UserRole.Supervisor_Sucursales, UserRole.Responsable_Farmacia
     ],
     submenu: [],
   },
-
-  /*
   {
-    path: '',
-    title: 'Soporte',
+    path: 'branch/branch-list',
+    title: 'Sucursales',
     iconType: 'material-icons-outlined',
-    icon: 'support_agent',
+    icon: 'location_city',
     class: '',
     groupTitle: false,
     badge: '',
     badgeClass: '',
-    role: ['All'],
+    role: [
+      UserRole.Admin,
+      UserRole.Supervisor_Sucursales
+    ],
     submenu: [],
   },
-  */
-
+  // {
+  //   path: 'reports/reports-list',
+  //   title: 'Reportes',
+  //   iconType: 'fas fa-chart-bar',
+  //   icon: '',
+  //   class: '',
+  //   groupTitle: false,
+  //   badge: '',
+  //   badgeClass: '',
+  //   role: ['All'],
+  //   submenu: [],
+  // },
   {
     path: '',
-    title: 'Administración',
+    title: 'Configuracion',
     iconType: '',
     icon: '',
     class: '',
@@ -110,29 +176,39 @@ export const ROUTES: RouteInfo[] = [
     badgeClass: '',
     role: [
       UserRole.Admin,
-      UserRole.Responsable_Farmacia,
-      UserRole.Supervisor_Sucursales,
+      UserRole.Medico,
     ],
     submenu: [],
   },
-
   {
-    path: 'admin/user-list',
-    title: 'Usuarios',
+    path: 'catalogs/catalogs-list',
+    title: 'Catalogos',
     iconType: 'material-icons-outlined',
-    icon: 'group',
+    icon: 'people_outline',
     class: '',
     groupTitle: false,
     badge: '',
     badgeClass: '',
     role: [
       UserRole.Admin,
-      UserRole.Responsable_Farmacia,
-      UserRole.Supervisor_Sucursales,
+      UserRole.Medico,
     ],
     submenu: [],
   },
-
+  {
+    path: 'catalogs/catalogs-list-v2',
+    title: 'Catalogos V2',
+    iconType: 'material-icons-outlined',
+    icon: 'people_outline',
+    class: '',
+    groupTitle: false,
+    badge: '',
+    badgeClass: '',
+    role: [
+      UserRole.Admin
+    ],
+    submenu: [],
+  },
   {
     path: '',
     title: 'Perfil',
@@ -145,9 +221,8 @@ export const ROUTES: RouteInfo[] = [
     role: ['All'],
     submenu: [],
   },
-
   {
-    path: 'user-profile',
+    path: 'user/profile',
     title: 'Perfil',
     iconType: 'material-icons-outlined',
     icon: 'account_circle',

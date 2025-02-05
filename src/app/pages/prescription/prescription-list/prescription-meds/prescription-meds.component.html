@@ -1,0 +1,50 @@
+<div class="addContainer">
+  <div class="modalHeader">
+    <div class="editRowModal">
+      <div class="modalHeader clearfix">
+        <div class="modal-about"> Medicamentos para el paciente: <br> <span
+          style="color: #00a5b8">{{ dialogTitle }}</span>
+        </div>
+      </div>
+    </div>
+    <button (click)="dialogRef.close()" aria-label="Close dialog" class="modal-close-button" mat-icon-button>
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div mat-dialog-content>
+    <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12 m-t-20">
+      <mat-list>
+        @for (detalle of detalles; track detalle) {
+          <mat-divider/>
+          <h5>Medicamento</h5>
+          <mat-list-item>{{ detalle.medicamento }}</mat-list-item>
+          <mat-list-item>
+            <span class="font-bold">Tipo de medicamento: </span> {{ detalle.medicamentoType }}
+          </mat-list-item>
+          <mat-list-item>
+            <span class="font-bold">Ruta de Administración: </span>{{ detalle.rutaAdministracion }}
+          </mat-list-item>
+          <mat-list-item><span class="font-bold">Cantidad Diaria: </span>
+            {{ detalle.cantidadDiaria }} {{ detalle.unidadDispensacion }}
+          </mat-list-item>
+          <mat-list-item>
+            <span
+              class="font-bold">Durante: </span>{{ detalle.duracion }} {{ detalle.unidadDuracion }} {{ detalle.frecuencia }}
+          </mat-list-item>
+          <mat-list-item>
+            <span class="font-bold">Motivo: </span>
+            <span *ngIf="detalle.indicacionNombre; else sinMotivo">{{ detalle.indicacionNombre }}</span>
+            <ng-template #sinMotivo>Sin Motivo Registrado</ng-template>
+          </mat-list-item>
+          <mat-list-item>
+            <span class="font-bold">Inicio: </span>{{ detalle.periodoInicio.split('T')[0] }}
+            <span class="font-bold">Final: </span>{{ detalle.periodoTerminacion.split('T')[0] }}
+          </mat-list-item>
+          <mat-list-item>
+            <span class="font-bold">Observaciones: </span>{{ detalle.observaciones }}
+          </mat-list-item>
+        }
+      </mat-list>
+    </div>
+  </div>
+</div>

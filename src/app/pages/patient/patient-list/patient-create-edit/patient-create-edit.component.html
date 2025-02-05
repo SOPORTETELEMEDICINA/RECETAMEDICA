@@ -1,0 +1,541 @@
+<!--suppress AngularNgOptimizedImage -->
+<section class="content">
+  <div class="content-block">
+    <div class="block-header">
+      <app-breadcrumb [active_item]="'Crear'" [title]="'Paciente'"></app-breadcrumb>
+    </div>
+    <div class="row clearfix">
+      <div class="col-lg-4 col-md-12">
+        <div class="card">
+          <div class="m-b-20">
+            <div class="contact-grid">
+              <div class="profile-header" style="background-color: #003359">
+                <div class="user-name">{{ param ? 'Editar' : 'Nuevo' }} Paciente</div>
+              </div>
+              <img alt="" class="user-img" src="{{userImg}}">
+              <div [hidden]="patologiesNames.length < 1" class="col-lg-12 col-xl-12 col-md-12 col-sm-12 m-t-20">
+                <mat-list>
+                  <h5>Patologías</h5>
+                  <mat-list-item *ngFor="let row of patologiesNames">{{
+                      row
+                    }}
+                  </mat-list-item>
+                </mat-list>
+              </div>
+              <div [hidden]="allergiesNames.length < 1" class="col-lg-12 col-xl-12 col-md-12 col-sm-12 m-t-20">
+                <mat-list>
+                  <h5>Alergias</h5>
+                  <mat-list-item *ngFor="let row of allergiesNames">{{
+                      row
+                    }}
+                  </mat-list-item>
+                </mat-list>
+              </div>
+              <div [hidden]="molesculesNames.length < 1" class="col-lg-12 col-xl-12 col-md-12 col-sm-12 m-t-20">
+                <mat-list>
+                  <h5>Moleculas</h5>
+                  <mat-list-item *ngFor="let row of molesculesNames">{{
+                      row
+                    }}
+                  </mat-list-item>
+                </mat-list>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-8 col-md-12">
+        <div class="card">
+          <mat-tab-group>
+            <mat-tab>
+              <ng-template mat-tab-label>
+                <mat-icon class="example-tab-icon msr-2">face</mat-icon>
+                Datos generales
+              </ng-template>
+              <form [formGroup]="userForm" class="register-form m-4">
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field appearance="outline" class="example-full-width">
+                      <mat-label>Usuario</mat-label>
+                      <input
+                        aria-autocomplete="none"
+                        autocomplete="nope"
+                        formControlName="usr"
+                        matInput
+                        required
+                      />
+                      @if (userForm.get('usr')?.hasError('required')) {
+                        <mat-error>{{ getErrorMessage() }}</mat-error>
+                      }
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-xl-6 col-lg- col-md-6 col-sm-12 mb-2">
+                    <mat-form-field appearance="outline" class="example-full-width">
+                      <mat-label>Correo electronico</mat-label>
+                      <input
+                        aria-autocomplete="none"
+                        autocomplete="nope"
+                        email
+                        formControlName="email"
+                        matInput
+                        required
+                      />
+                      @if (userForm.get('email')?.hasError('email')) {
+                        <mat-error>{{ getErrorMessage() }}</mat-error>
+                      }
+                      @if (userForm.get('email')?.hasError('required')) {
+                        <mat-error>{{ getErrorMessage() }}</mat-error>
+                      }
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div *ngIf="!param" class="row">
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field appearance="outline" class="example-full-width">
+                      <mat-label>Contraseña</mat-label>
+                      <input
+                        aria-autocomplete="none"
+                        autocomplete="nope"
+                        formControlName="password"
+                        matInput
+                        type="password"
+                      />
+                      @if (userForm.get('password')?.hasError('required')) {
+                        <mat-error>{{ getErrorMessage() }}</mat-error>
+                      }
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <mat-divider/>
+
+                <div class="row m-t-20">
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field appearance="outline" class="example-full-width">
+                      <mat-label>Nombre (s)</mat-label>
+                      <input
+                        appUppercaseNoAccent
+                        aria-autocomplete="none"
+                        autocomplete="nope"
+                        formControlName="nombres"
+                        matInput
+                        required
+                      />
+                      @if (userForm.get('nombres')?.hasError('required')) {
+                        <mat-error>{{ getErrorMessage() }}</mat-error>
+                      }
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field appearance="outline" class="example-full-width">
+                      <mat-label>Apellido paterno</mat-label>
+                      <input
+                        appUppercaseNoAccent
+                        aria-autocomplete="none"
+                        autocomplete="nope"
+                        formControlName="primerApellido"
+                        matInput
+                        required
+                      />
+                      @if (userForm.get('primerApellido')?.hasError('required')) {
+                        <mat-error>{{ getErrorMessage() }}</mat-error>
+                      }
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field appearance="outline" class="example-full-width">
+                      <mat-label>Apellido materno</mat-label>
+                      <input
+                        appUppercaseNoAccent
+                        aria-autocomplete="none"
+                        autocomplete="nope"
+                        formControlName="segundoApellido"
+                        matInput
+                        required=""
+                      />
+                      @if (userForm.get('segundoApellido')?.hasError('required')) {
+                        <mat-error>{{ getErrorMessage() }}</mat-error>
+                      }
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field appearance="outline" class="example-full-width">
+                      <mat-label>Télefono móvil</mat-label>
+                      <input
+                        appUppercaseNoAccent
+                        aria-autocomplete="none"
+                        autocomplete="nope"
+                        formControlName="movil"
+                        matInput
+                        required
+                      />
+                      @if (userForm.get('movil')?.hasError('required')) {
+                        <mat-error>{{ getErrorMessage() }}</mat-error>
+                      }
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field appearance="outline" class="example-full-width">
+                      <mat-label>Dirección</mat-label>
+                      <textarea
+                        appUppercaseNoAccent aria-autocomplete="none"
+                        autocomplete="nope"
+                        formControlName="domicilio"
+                        matInput
+                        required
+                      ></textarea>
+                      @if (userForm.get('domicilio')?.hasError('required')) {
+                        <mat-error>{{ getErrorMessage() }}</mat-error>
+                      }
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <mat-divider/>
+
+                <div class="row m-t-20">
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field appearance="outline" class="example-full-width">
+                      <mat-label>Asentamiento</mat-label>
+                      <input
+                        (keydown)="searchSettlementsByKeyPress($event)"
+                        [(ngModel)]="settlementSearch"
+                        [matAutocomplete]="auto"
+                        aria-autocomplete="none"
+                        autocomplete="nope"
+                        formControlName="settlementSearch"
+                        matInput
+                        name="settlement"
+                        type="text"
+                      />
+                      <mat-autocomplete
+                        #auto="matAutocomplete"
+                        (optionSelected)="setSelectedSettlement($event.option.value)"
+                        [displayWith]="displayFn"
+                      >
+                        @for (option of settlements; track option) {
+                          <mat-option [value]="option">
+                            {{ option.asentamiento }}, {{ option.estado }} - CP: {{ option.codigoPostal }}
+                          </mat-option>
+                        }
+                      </mat-autocomplete>
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div *ngIf="!isDoctor" class="row m-t-20">
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field appearance="outline" class="example-full-width">
+                      <mat-label>Grupo empresarial</mat-label>
+                      <mat-select
+                        (selectionChange)="getBranchesByGemp()"
+                        formControlName="idGEMP"
+                        required
+                      >
+                        <mat-option
+                          *ngFor="let row of businessGroups"
+                          value="{{ row.idGEMP }}"
+                        >{{ row.nombre }}
+                        </mat-option
+                        >
+                      </mat-select>
+                      @if (userForm.get('idGEMP')?.hasError('required')) {
+                        <mat-error>{{ getErrorMessage() }}</mat-error>
+                      }
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div *ngIf="!isDoctor" class="row m-t-20">
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field appearance="outline" class="example-full-width">
+                      <mat-label>Sucursal</mat-label>
+                      <mat-select
+                        formControlName="idSucursal"
+                        required
+                      >
+                        <mat-option
+                          *ngFor="let row of branches"
+                          value="{{ row.idSucursal }}"
+                        >{{ row.nombre }}
+                        </mat-option
+                        >
+                      </mat-select>
+                      @if (userForm.get('idSucursal')?.hasError('required')) {
+                        <mat-error>{{ getErrorMessage() }}</mat-error>
+                      }
+                    </mat-form-field>
+                  </div>
+                </div>
+                <mat-divider/>
+              </form>
+
+              <form [formGroup]="patientForm" class="register-form m-4">
+                <div class="row m-t-20">
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field appearance="outline" class="example-full-width">
+                      <mat-label>Entidad de nacimiento</mat-label>
+                      <mat-select
+                        formControlName="idEntidadNacimiento"
+                        required
+                      >
+                        <mat-option
+                          *ngFor="let row of federalEntity"
+                          value="{{ row.idEntidad }}"
+                        >{{ row.nombre }}
+                        </mat-option
+                        >
+                      </mat-select>
+
+                      @if (userForm.get('idEntidadNacimiento')?.hasError('required')) {
+                        <mat-error>{{ getErrorMessage() }}</mat-error>
+                      }
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+
+                    <mat-form-field appearance="outline" class="example-full-width">
+                      <mat-label>Genero</mat-label>
+                      <mat-select
+                        formControlName="genero"
+                        required
+                      >
+                        <mat-option value="F">
+                          FEMENINO
+                        </mat-option>
+                        <mat-option value="M">
+                          MASCULINO
+                        </mat-option>
+
+                      </mat-select>
+
+                      @if (userForm.get('genero')?.hasError('required')) {
+                        <mat-error>{{ getErrorMessage() }}</mat-error>
+                      }
+                    </mat-form-field>
+
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field appearance="outline" class="example-full-width mb-3">
+                      <mat-label>Fecha de Nacimiento</mat-label>
+                      <input
+                        (dateChange)="onDateChange($event)"
+                        [matDatepicker]="picker"
+                        [value]="formatDate(userForm.get('fechaNacimiento')?.value)"
+                        aria-autocomplete="none"
+                        autocomplete="nope"
+                        formControlName="fechaNacimiento"
+                        matInput
+                        required
+                      >
+                      <mat-datepicker-toggle [for]="picker" matSuffix></mat-datepicker-toggle>
+                      <mat-datepicker #picker></mat-datepicker>
+                      @if (patientForm.get('fechaNacimiento')?.hasError('required')) {
+                        <mat-error>{{ getErrorMessage() }}</mat-error>
+                      }
+                    </mat-form-field>
+                  </div>
+                </div>
+              </form>
+
+            </mat-tab>
+
+            <mat-tab>
+
+              <ng-template mat-tab-label>
+                <mat-icon class="example-tab-icon msr-2">settings</mat-icon>
+                Antecedentes Destacables
+              </ng-template>
+              <form [formGroup]="patientForm" class="register-form m-4">
+
+                <div class="row m-t-20">
+                  <div class="col-lg-4 col-xl-4 col-md-6 col-sm-6 border-right">
+                    <div class="row">
+                      <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
+                        <h5 class="align-center border-botton-color">Patologías</h5>
+                      </div>
+
+                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                        <mat-form-field appearance="outline" class="example-full-width">
+                          <mat-label>Buscar Patologias</mat-label>
+                          <input
+                            (keydown)="searchPatologiesByKeyPress($event)"
+                            [(ngModel)]="searchPatologies"
+                            [matAutocomplete]="autoPatologies"
+                            aria-autocomplete="none"
+                            autocomplete="nope"
+                            formControlName="patologias"
+                            matInput
+                            name="patologias"
+                            type="text"
+                          />
+                          <mat-autocomplete
+                            #autoPatologies="matAutocomplete"
+                            (optionSelected)="setSelectedPatology($event.option.value)"
+                            [displayWith]="displayFnPatologies"
+                          >
+                            @for (option of patologies; track option) {
+                              <mat-option [value]="option">
+                                {{ option.nameCIM10 }}
+                              </mat-option>
+                            }
+                          </mat-autocomplete>
+                        </mat-form-field>
+                      </div>
+
+                      <p class="border-botton"></p>
+
+                      <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12 m-t-20">
+                        <mat-list>
+                          <mat-list-item *ngFor="let row of patologiesNames; let i = index">
+                            <span matTooltip="{{ row }}" matTooltipPosition="above">
+                            <button (click)="removePatology(i)" color="warn" mat-icon-button>
+                              <mat-icon>close</mat-icon>
+                            </button>
+                              {{ row }}
+                            </span>
+                          </mat-list-item>
+                        </mat-list>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-4 col-xl-4 col-md-6 col-sm-6 border-right">
+                    <div class="row">
+                      <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
+                        <h5 class="align-center border-botton-color">Alergias</h5>
+                      </div>
+
+                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                        <mat-form-field appearance="outline" class="example-full-width">
+                          <mat-label>Buscar Alergias</mat-label>
+                          <input
+                            (keydown)="searchAllergiesByKeyPress($event)"
+                            [(ngModel)]="searchAllergies"
+                            [matAutocomplete]="autoAlergias"
+                            aria-autocomplete="none"
+                            autocomplete="nope"
+                            formControlName="alergias"
+                            matInput
+                            name="alergias"
+                            type="text"
+                          />
+                          <mat-autocomplete
+                            #autoAlergias="matAutocomplete"
+                            (optionSelected)="setSelectedAllergy($event.option.value)"
+                            [displayWith]="displayFnAllergy"
+                          >
+                            @for (option of allergies; track option) {
+                              <mat-option [value]="option">
+                                {{ option.nameAllergy }}
+                              </mat-option>
+                            }
+                          </mat-autocomplete>
+                        </mat-form-field>
+                      </div>
+
+                      <p class="border-botton"></p>
+
+                      <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12 m-t-20">
+                        <mat-list>
+                          <mat-list-item *ngFor="let row of allergiesNames; let i = index">
+                            <span matTooltip="{{ row }}" matTooltipPosition="above">
+                            <button (click)="removeAllergy(i)" color="warn" mat-icon-button>
+                              <mat-icon>close</mat-icon>
+                            </button>
+                              {{ row }}
+                            </span>
+                          </mat-list-item>
+                        </mat-list>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-4 col-xl-4 col-md-6 col-sm-6">
+                    <div class="row">
+                      <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
+                        <h5 class="align-center border-botton-color">Moleculas</h5>
+                      </div>
+
+                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                        <mat-form-field appearance="outline" class="example-full-width">
+                          <mat-label>Buscar Alergias</mat-label>
+                          <input
+                            (keydown)="searchMolesculesByKeyPress($event)"
+                            [(ngModel)]="searchMolescule"
+                            [matAutocomplete]="autoMolecules"
+                            aria-autocomplete="none"
+                            autocomplete="nope"
+                            formControlName="molecules"
+                            matInput
+                            name="molecules"
+                            type="text"
+                          />
+                          <mat-autocomplete
+                            #autoMolecules="matAutocomplete"
+                            (optionSelected)="setSelectedMolecule($event.option.value)"
+                            [displayWith]="displayFnMolescules"
+                          >
+                            @for (option of molescules; track option) {
+                              <mat-option [value]="option">
+                                {{ option.nameMolecule }}
+                              </mat-option>
+                            }
+                          </mat-autocomplete>
+                        </mat-form-field>
+                      </div>
+
+                      <p class="border-botton"></p>
+
+                      <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12 m-t-20">
+                        <mat-list>
+                          <mat-list-item *ngFor="let row of molesculesNames; let i = index">
+                            <span matTooltip="{{ row }}" matTooltipPosition="above">
+                            <button (click)="removeMolecule(i)" color="warn" mat-icon-button>
+                              <mat-icon>close</mat-icon>
+                            </button>
+                              {{ row }}
+                            </span>
+                          </mat-list-item>
+                        </mat-list>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </mat-tab>
+
+          </mat-tab-group>
+
+          <button (click)="confirmAdd()"
+                  [disabled]="!userForm.valid || !patientForm.valid"
+                  [ngClass]="{
+          'button-custom': true,
+          'disabled': !userForm.valid || !patientForm.valid
+        }"
+                  color="primary"
+                  mat-button>
+            {{ !userForm.valid || !patientForm.valid ? 'Formulario Incompleto' : param ? 'Editar usuario' : 'Crear usuario' }}
+          </button>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

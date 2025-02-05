@@ -1,14 +1,16 @@
 export class Settlement {
   idAsentamiento!: number;
-  idCP!: number;
-  nombreAsentamiento!: string;
+  asentamiento!: string;
+  idTipoAsentamiento!: number;
   tipoAsentamiento!: string;
-  codigoPostal!: number;
+  idCP!: number;
+  codigoPostal!: string;
   idMunicipio!: number;
   noMunicipio!: number;
+  municipio!: string;
   idCiudad!: number;
-  nombreCiudad!: string;
+  ciudad!: string;
   idEntidad!: number;
-  nombreEntidad!: string;
+  estado!: string;
   abreviatura!: string;
 }

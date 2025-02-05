@@ -1,20 +1,91 @@
-.example-list-section {
-    display: flex;
-    flex-direction: column; /* Alinea los elementos en columna (vertical) */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
-.border-botton-color {
-    width: 95%; /* El h5 ocupará el 90% del ancho del contenedor padre */
-    margin: 0 auto; /* Centra el h5 dentro del contenedor */
-    border-bottom: 2px solid #64b2ae; /* Borde alrededor del h5 */
+input[type="number"] {
+  -moz-appearance: textfield;
 }
 
-.border-botton {
-    width: 92%; /* El h5 ocupará el 90% del ancho del contenedor padre */
-    margin: 0 auto; /* Centra el h5 dentro del contenedor */
-    border-bottom: 2px solid #dfdfdf; /* Borde alrededor del h5 */
+.checkbox-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  height: 100%;
+  text-align: center;
 }
 
-.border-right {
-    border-right: 2px solid #dfdfdf; /* Borde alrededor del h5 */
+.custom-checkbox .mat-checkbox-inner-container {
+  transform: scale(2) !important;
+}
+
+.custom-checkbox {
+  margin: 10px 0;
+}
+
+.scrollable-container {
+  max-height: 200px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.col-lg-12 {
+  margin-bottom: 0 !important;
+}
+
+.color-light {
+  color: #00A5B8;
+}
+
+.color-deep {
+  color: #003359;
+}
+
+.color-orange {
+  color: #EE8B60;
+}
+
+.back-button {
+  display: flex;
+  align-items: center;
+  color: #3f51b5;
+  font-size: 16px;
+  cursor: pointer;
+  margin-bottom: 12px;
+  user-select: none;
+  padding: 8px 0;
+}
+
+.back-button .icon {
+  font-size: 20px;
+  margin-right: 4px;
+}
+
+.iframe-container {
+  width: 100%;
+  height: calc(100vh - 150px);
+  overflow: visible;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+//.iframe-container {
+//  width: 80%;
+//  height: calc(100vh - 150px);
+//  //overflow: hidden;
+//  display: flex;
+//  justify-content: center;
+//  align-items: center;
+//  border: none;
+//  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+//}
+
+.iframe-content {
+  width: 100%;
+  height: 100%;
+  border: none;
+  transform: scale(1.45);
+  transform-origin: top center;
 }

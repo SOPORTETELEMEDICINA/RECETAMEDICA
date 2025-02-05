@@ -1,10 +1,10 @@
-import { Direction, BidiModule } from '@angular/cdk/bidi';
-import { Component, Inject, Renderer2 } from '@angular/core';
-import { DirectionService, InConfiguration } from '@core';
-import { ConfigService } from '@config';
-import { DOCUMENT } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
-import { UnsubscribeOnDestroyAdapter } from '@shared';
+import {BidiModule, Direction} from '@angular/cdk/bidi';
+import {Component, Inject, Renderer2} from '@angular/core';
+import {DirectionService, InConfiguration} from '@core';
+import {ConfigService} from '@config';
+import {DOCUMENT} from '@angular/common';
+import {RouterOutlet} from '@angular/router';
+import {UnsubscribeOnDestroyAdapter} from '@shared';
 
 @Component({
   selector: 'app-auth-layout',
@@ -16,6 +16,7 @@ import { UnsubscribeOnDestroyAdapter } from '@shared';
 export class AuthLayoutComponent extends UnsubscribeOnDestroyAdapter {
   direction!: Direction;
   public config!: InConfiguration;
+
   constructor(
     @Inject(DOCUMENT) private document: Document,
     private directoryService: DirectionService,
@@ -36,7 +37,7 @@ export class AuthLayoutComponent extends UnsubscribeOnDestroyAdapter {
           }
         } else {
           if (this.config) {
-            if (this.config.layout.rtl === true) {
+            if (this.config.layout.rtl) {
               this.direction = 'rtl';
               localStorage.setItem('isRtl', 'true');
             } else {

@@ -1,0 +1,134 @@
+<div class="addContainer">
+  <div class="modalHeader">
+    <div class="editRowModal">
+      <div class="modalHeader clearfix">
+        <div class="modal-about">
+          <h4> Posología del medicamento</h4>
+          Medicamento: <br>
+          {{ name }} <br>
+          {{ summary }}
+        </div>
+      </div>
+    </div>
+    <button (click)="cancel()" aria-label="Close dialog" class="modal-close-button" mat-icon-button>
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div mat-dialog-content>
+
+    <div class="row">
+      <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+        <mat-form-field appearance="outline" class="example-full-width">
+          <mat-label>Cantidad:</mat-label>
+          <input
+            (ngModelChange)="validateValue('dose', $event)"
+            [(ngModel)]="dose"
+            aria-autocomplete="none"
+            autocomplete="nope"
+            matInput
+            min="0"
+            required
+            type="number"/>
+        </mat-form-field>
+      </div>
+      <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+        <mat-form-field appearance="outline" class="example-full-width">
+          <mat-label>Unidad:</mat-label>
+          <mat-select [(value)]="unitId">
+            <mat-option *ngFor="let unit of data.units" [value]="unit.IdUnit">{{ unit.Name }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div [hidden]="isSingleDose" class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+        <mat-form-field appearance="outline" class="example-full-width">
+          <input
+            (ngModelChange)="validateValue('frecuency', $event)"
+            [(ngModel)]="frecuency"
+            aria-autocomplete="none"
+            autocomplete="nope"
+            class="example-right-align center-input"
+            matInput
+            min="0"
+            type="number"/>
+          <span matTextPrefix>Cada: </span>
+          <span matTextSuffix> Horas</span>
+        </mat-form-field>
+      </div>
+      <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+          <mat-checkbox (change)="toggleSingleDose()" [(ngModel)]="isSingleDose">Dosis Única</mat-checkbox>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+        <mat-form-field appearance="outline" class="example-full-width">
+          <mat-label>Duración:</mat-label>
+          <input
+            (ngModelChange)="validateValue('duration', $event)"
+            [(ngModel)]="duration"
+            aria-autocomplete="none"
+            autocomplete="nope"
+            matInput
+            min="0"
+            required
+            type="number"/>
+        </mat-form-field>
+      </div>
+      <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+        <mat-form-field appearance="outline" class="example-full-width">
+          <mat-label>Periodo:</mat-label>
+          <mat-select [(value)]="durationType">
+            <mat-option value="YEAR">Año(s)</mat-option>
+            <mat-option value="MONTH">Mes(es)</mat-option>
+            <mat-option value="WEEK">Semana(s)</mat-option>
+            <mat-option value="DAY">Día(s)</mat-option>
+            <mat-option value="HOUR">Hora(s)</mat-option>
+            <mat-option value="MINUTE">Minuto(s)</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+        <mat-form-field appearance="outline" class="example-full-width">
+          <mat-label>Via:</mat-label>
+          <mat-select [(value)]="route">
+            <mat-option *ngFor="let route of data.routes" [value]="route.IdRoute">{{ route.Name }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+        <mat-form-field appearance="outline" class="example-full-width">
+          <mat-label>Motivo de uso:</mat-label>
+          <mat-select [(value)]="indication">
+            <mat-option *ngFor="let indication of data.indications" [value]="indication.Id">{{ indication.Name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+        <mat-form-field appearance="outline" class="example-full-width">
+          <mat-label>Indicaciones de uso del Medicamento:</mat-label>
+          <textarea
+            [(ngModel)]="obs"
+            appUppercaseNoAccent
+            aria-autocomplete="none"
+            autocomplete="nope"
+            matInput
+          ></textarea>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+        <div class="example-button-row">
+          <button (click)="save()" color="primary" mat-flat-button>Guardar</button>
+          <button (click)="cancel()" color="warn" mat-flat-button tabindex="-1">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,117 +1,166 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
+// noinspection DuplicatedCode
+
+import {Component, OnInit} from '@angular/core';
 import {
-  MatDialog,
-  MatDialogTitle,
-  MatDialogContent,
-  MatDialogRef,
-  MAT_DIALOG_DATA,
-} from '@angular/material/dialog';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { UserDetails } from '@core/models/UserDetails';
-import { Settlement } from '@core/models/Settlement';
-import { CatalogsService } from '@core/http/catalogs.service';
-import { debounceTime, distinctUntilChanged, Subject, tap } from 'rxjs';
-import { UserType } from '@core/models/UserType';
-import { MatSelectModule } from '@angular/material/select';
-import { NgFor, NgIf } from '@angular/common';
-import { MatDividerModule } from '@angular/material/divider';
-import { BusinessGroup } from '@core/models/BusinessGroup';
-import { Branch } from '@core/models/Branch';
-import { AuthManagementService } from '@core/service/auth-management.service';
-import { UserRole } from '@core/models/Enums/UserRole';
-import { AdminService } from '@core/http/admin.service';
-import { DefaultResponse } from '@core/models/Http/DefaultResponse';
-import Swal from 'sweetalert2';
-import { Doctor } from '@core/models/Doctor';
-import { CreateUserResponse } from '@core/models/Http/Response/CreateUserResponse';
-import { Patient } from '@core/models/Patient';
-import { FederalEntity } from '@core/models/FederalEntity';
+  FormsModule,
+  ReactiveFormsModule,
+  UntypedFormBuilder,
+  UntypedFormControl,
+  UntypedFormGroup,
+  Validators
+} from '@angular/forms';
+import {MatButton, MatButtonModule} from '@angular/material/button';
+import {MatError, MatFormField, MatFormFieldModule, MatLabel} from '@angular/material/form-field';
+import {MatInput, MatInputModule} from '@angular/material/input';
+import {MatAutocomplete, MatAutocompleteTrigger, MatOption} from '@angular/material/autocomplete';
+import {UserDetails} from '@core/models/UserDetails';
+import {Settlement} from '@core/models/Settlement';
+import {CatalogsService} from '@core/http/catalogs.service';
+import {debounceTime, distinctUntilChanged, Subject, tap} from 'rxjs';
+import {MatSelect, MatSelectModule} from '@angular/material/select';
+import {NgClass, NgForOf, NgIf} from '@angular/common';
+import {MatDivider} from '@angular/material/divider';
+import {BusinessGroup} from '@core/models/BusinessGroup';
+import {Branch} from '@core/models/Branch';
+import {UserRole} from '@core/models/Enums/UserRole';
+import {AdminService} from '@core/http/admin.service';
+import {DefaultResponse} from '@core/models/Http/DefaultResponse';
+import {CreateUserResponse} from '@core/models/Http/Response/CreateUserResponse';
+import {BreadcrumbComponent} from "@shared/components/breadcrumb/breadcrumb.component";
+import {MatIcon} from "@angular/material/icon";
+import {MatTab, MatTabGroup, MatTabLabel} from "@angular/material/tabs";
+import {MatOptionModule} from "@angular/material/core";
+import {MatDatepickerModule} from "@angular/material/datepicker";
+import {GeneralFunctionsService} from "@core/service/generalFunctions.service";
+import {ActivatedRoute, Router} from "@angular/router";
+import {FileUploadComponent} from "@shared/components/file-upload/file-upload.component";
+import {ImageSignature} from "@core/models/ImageSignature";
+import {CreateEditService} from "@core/http/create-edit-service";
+import {UppercaseNoAccentDirective} from "@shared/directives/uppercase-no-accent.directive";
 
 @Component({
   selector: 'app-user-edit-create',
   standalone: true,
   imports: [
-    MatDialogTitle,
-    MatDialogContent,
+    BreadcrumbComponent,
     FormsModule,
+    MatButton,
+    MatFormField,
+    MatIcon,
+    MatInput,
+    MatLabel,
+    MatTab,
+    MatTabGroup,
+    MatTabLabel,
+    MatDivider,
+    MatError,
+    MatOption,
+    MatSelect,
+    NgForOf,
     ReactiveFormsModule,
+    NgClass,
+    MatAutocompleteTrigger,
+    MatAutocomplete,
+    NgIf,
+    FormsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatButtonModule,
-    MatAutocompleteModule,
     MatSelectModule,
-    NgIf,
-    NgFor,
-    MatDividerModule,
+    MatOptionModule,
+    MatDatepickerModule,
+    MatButtonModule,
+    FileUploadComponent,
+    UppercaseNoAccentDirective
   ],
   templateUrl: './user-edit-create.component.html',
   styleUrl: './user-edit-create.component.scss',
 })
 export class UserEditCreateComponent implements OnInit {
-  UserRole = UserRole;
+  param: string | null = null;
+  paramGid: string | null = null;
+  roles: any[];
 
   user: UserDetails;
-  doctor: Doctor;
-  patient: Patient;
-  settlements: Settlement[];
-  settlementSearch: string;
-  userTypes: UserType[];
-  federalEntity: FederalEntity[];
+  archive: ImageSignature;
+  userImg?: string;
+
   businessGroups: BusinessGroup[];
   branches: Branch[];
-  cities: Branch[];
-  idUsuarioAuth!: string;
 
-  isUserAdmin: boolean;
-  isUserPharmacySupervision: boolean;
-  isUserPharmacyResponsible: boolean;
+  settlements: Settlement[];
+  settlementSearch: string;
 
   keyPress$ = new Subject();
 
+  userForm: UntypedFormGroup;
+  archiveForm: UntypedFormGroup;
+  blankObject = {} as UserDetails;
+  formControl = new UntypedFormControl('', [
+    Validators.required,
+  ]);
+
   constructor(
-    private dialog: MatDialog,
     private catalogsService: CatalogsService,
-    private authManagement: AuthManagementService,
     private adminService: AdminService,
-    private dialogRef: MatDialogRef<UserEditCreateComponent>,
-    @Inject(MAT_DIALOG_DATA) private userFromTable: UserDetails
+    private gfs: GeneralFunctionsService,
+    private fb: UntypedFormBuilder,
+    private router: Router,
+    private route: ActivatedRoute,
+    private ecService: CreateEditService,
   ) {
-    this.user = new UserDetails();
-    this.doctor = new Doctor();
-    this.patient = new Patient();
-    this.settlements = [];
-    this.settlementSearch = '';
-    this.userTypes = [];
-    this.federalEntity = [];
+    this.user = new UserDetails(this.blankObject);
+    this.archive = new ImageSignature();
     this.businessGroups = [];
     this.branches = [];
-    this.cities = [];
-    this.isUserAdmin = false;
-    this.isUserPharmacySupervision = false;
-    this.isUserPharmacyResponsible = false;
+    this.settlements = [];
+    this.settlementSearch = '';
+
+    this.route.paramMap.subscribe(params => {
+      this.param = params.get('param');
+      this.paramGid = params.get('gid');
+    });
+
+    this.userForm = this.createUserForm();
+    this.archiveForm = this.createArchivesForm();
+
+    const userDetails = JSON.parse(<string>localStorage.getItem('userDetails'));
+    if (userDetails?.idTipoUsuario === UserRole.Responsable_Farmacia) {
+      this.roles = Object.entries(UserRole)
+        .filter(([name]) => name === 'Empleado_Farmacia')
+        .map(([name, value]) => ({
+          name: this.formatRoleName(name),
+          value,
+        }));
+    } else {
+      this.roles = Object.entries(UserRole)
+        .filter(([name]) => !['All', 'Medico', 'Paciente'].includes(name))
+        .map(([name, value]) => ({
+          name: this.formatRoleName(name),
+          value,
+        }));
+    }
+  }
+
+  formatRoleName(name: string): string {
+    return name
+      .replace(/_/g, ' ')
+      .replace(/\b\w/g, char => char.toUpperCase());
+  }
+
+  getErrorMessage() {
+    return this.formControl.hasError('required')
+      ? 'Campo requerido'
+      : this.formControl.hasError('email')
+        ? 'Correo invalido'
+        : 'Error'
   }
 
   ngOnInit(): void {
-    if (this.userFromTable) {
-      this.user = this.userFromTable;
-
-      this.settlementSearch = this.user.nombreAsentamiento;
-
-      this.searchSettlements();
-      this.getBranchesByGemp();
-    }
-
-    this.isUserAdmin = this.authManagement.isUserAdmin();
-    const userData = this.authManagement.userData();
-    this.idUsuarioAuth = userData.IdUsuario;
-
-    this.getUserTypes();
-    this.getFederalEntity();
+    this.userImg = 'assets/images/user/imgUSer.png';
     this.getBusinessGroups();
+    if (this.param) {
+      this.getUserdetails(this.param, this.paramGid);
+    }
 
     this.keyPress$
       .pipe(
@@ -124,70 +173,6 @@ export class UserEditCreateComponent implements OnInit {
       .subscribe();
   }
 
-  searchSettlementsByKeyPress() {
-    this.keyPress$.next(event);
-  }
-
-  searchSettlements() {
-    if (!this.settlementSearch) {
-      this.settlements = [];
-
-      return;
-    }
-
-    this.catalogsService
-      .getSettlementByPostalCode(this.settlementSearch)
-      .subscribe({
-        next: (res: DefaultResponse<Settlement[]>) => {
-          this.settlements = [...res.data];
-        },
-      });
-  }
-
-  setSelectedSettlement(value: Settlement) {
-    if (value) {
-      this.user.idAsentamiento = value.idAsentamiento;
-    } else {
-    }
-
-    this.user.idAsentamiento = value ? value.idAsentamiento : undefined;
-  }
-
-  getUserTypes() {
-    this.catalogsService.getUserTypes().subscribe({
-      next: (res: DefaultResponse<UserType[]>) => {
-        this.userTypes = [...res.data];
-
-        if (!this.isUserAdmin) {
-          const index = this.userTypes.findIndex(
-            (r) => r.idTipoUsuario == UserRole.Admin
-          );
-
-          this.userTypes.splice(index, 1);
-        }
-
-        if (!this.isUserPharmacyResponsible && !this.isUserAdmin) {
-          const filteredUserTypes = this.userTypes.filter((t) =>
-            [
-              UserRole.Empleado_Farmacia,
-              UserRole.Responsable_Farmacia,
-              UserRole.Medico,
-            ].some((r) => r == t.idTipoUsuario)
-          );
-          this.userTypes = [...filteredUserTypes];
-        }
-      },
-    });
-  }
-
-  getFederalEntity() {
-    this.catalogsService.getFederalEntitys().subscribe({
-      next: (res: DefaultResponse<FederalEntity[]>) => {
-        this.federalEntity = [...res.data];
-      },
-    });
-  }
-
   getBusinessGroups() {
     this.catalogsService.getBusinessGroups().subscribe({
       next: (res: DefaultResponse<BusinessGroup[]>) => {
@@ -196,108 +181,148 @@ export class UserEditCreateComponent implements OnInit {
     });
   }
 
-  getBranchesByGemp() {
-    this.catalogsService.getBranchesByIdGEMP(this.user.idGEMP).subscribe({
-      next: (res: Branch[]) => {
-        this.branches = [...res];
+  removeAccents(value: string): string {
+    return value ? value.normalize('NFD').replace(/[\u0300-\u036f]/g, '') : value;
+  }
+
+  getUserdetails(param: string, paramGid: string | null) {
+    this.ecService.getUserById(paramGid).subscribe({
+      next: (res: DefaultResponse<UserDetails[]>) => {
+        const filtered = res.data.filter(value => value.idUsuario == param);
+        this.settlementSearch = filtered[0].nombreAsentamiento;
+        filtered[0].email = this.removeAccents(filtered[0].email);
+        this.searchSettlements();
+        this.user = this.mapToUserDetails(filtered[0]);
+        this.userForm = this.createUserForm();
       },
     });
   }
 
-  createUpdateUser() {
-    let canContinue = true;
+  getBranchesByGemp(idGEMP = '') {
+    if (!idGEMP) {
+      idGEMP = this.userForm.get('idGEMP')?.value
+    }
+    this.catalogsService.getBranchesByIdGEMP(idGEMP).subscribe({
+      next: (res: DefaultResponse<Branch[]>) => {
+        this.branches = [...res.data];
+      },
+    });
+  }
 
-    if (!this.user.idAsentamiento) {
-      Swal.fire({
-        icon: 'error',
-        html: 'Busca y selecciona un asentamiento para continuar',
-      });
-
+  searchSettlements() {
+    if (!this.settlementSearch) {
+      this.settlements = [];
       return;
     }
 
-    if (this.user.idTipoUsuario == UserRole.Medico) {
-      if (
-        !this.doctor.cedulaEspecialidad ||
-        !this.doctor.cedulaGeneral ||
-        !this.doctor.especialidad ||
-        !this.doctor.horario ||
-        !this.doctor.universidad
-      ) {
-        Swal.fire({
-          icon: 'error',
-          html: 'Falta la información sobre el médico',
-        });
+    this.catalogsService
+      .getSettlementByPostalCode(this.settlementSearch)
+      .subscribe({
+        next: (res: DefaultResponse<Settlement[]>) => {
+          this.settlements = [...res.data];
 
-        canContinue = false;
-      }
-    }
+          const selectedSettlement = this.settlements.find(
+            (settlement) => settlement.asentamiento === this.settlementSearch
+          );
+          if (selectedSettlement) {
+            this.userForm.patchValue({settlementSearch: selectedSettlement});
+            this.user.idAsentamiento = selectedSettlement.idAsentamiento;
+          }
+        },
+      });
+  }
 
-    if (this.user.idTipoUsuario == UserRole.Paciente) {
-      if (
-        !this.patient.fechaNacimiento ||
-        !this.patient.genero ||
-        !this.patient.idEntidadNacimiento
-      ) {
-        Swal.fire({
-          icon: 'error',
-          html: 'Falta la información sobre el paciente',
-        });
 
-        canContinue = false;
-      }
-    }
+  createUserForm(): UntypedFormGroup {
+    return this.fb.group({
+      idUsuario: [this.user.idUsuario],
+      usr: [this.user.usr],
+      password: [this.user.password],
+      idTipoUsuario: [this.user.idTipoUsuario],
+      idGEMP: [this.user.idGEMP],
+      idSucursal: [this.user.idSucursal],
+      nombres: [this.user.nombres],
+      primerApellido: [this.user.primerApellido],
+      segundoApellido: [this.user.segundoApellido],
+      idAsentamiento: [this.user.idAsentamiento],
+      domicilio: [this.user.domicilio],
+      movil: [this.user.movil],
+      email: [this.user.email],
+      settlementSearch: [this.settlementSearch],
+    });
+  }
 
-    if (!canContinue) return;
+  createArchivesForm(): UntypedFormGroup {
+    return this.fb.group({
+      idUsuario: [this.archive.idUsuario],
+      imagen: [this.archive.imagen],
+      firma: [this.archive.firma],
+      pdf: [this.archive.pdf],
+    });
+  }
 
-    this.adminService.createUpdateUser(this.user).subscribe({
+  mapToUserDetails(response: any): UserDetails {
+    this.getBranchesByGemp(response.idGEMP);
+    const userDetails = new UserDetails(this.blankObject);
+    userDetails.idUsuario = response.idUsuario;
+    userDetails.nombres = response.nombres;
+    userDetails.primerApellido = response.primerApellido;
+    userDetails.segundoApellido = response.segundoApellido;
+    userDetails.movil = response.movil;
+    userDetails.email = response.email;
+    userDetails.domicilio = response.domicilio;
+    userDetails.idAsentamiento = response.idAsentamiento;
+    userDetails.nombreAsentamiento = response.asentamiento;
+    userDetails.idCP = response.idCP;
+    userDetails.codigoPostal = response.codigoPostal;
+    userDetails.idMunicipio = response.idMunicipio;
+    userDetails.municipio = response.municipio;
+    userDetails.idGEMP = response.idGEMP;
+    userDetails.usr = response.usr;
+    userDetails.idSucursal = response.idSucursal;
+    userDetails.idTipoUsuario = response.idTipoUsuario;
+    return userDetails;
+  }
+
+  public confirmAdd(): void {
+    const userData = this.userForm.getRawValue();
+    delete userData.settlementSearch;
+    this.adminService.createUpdateUser(userData).subscribe({
       next: (res: DefaultResponse<CreateUserResponse>) => {
-        if (this.user.idTipoUsuario == UserRole.Medico) {
-          this.doctor.idUsuario = res.data.idUsuario;
-
-          this.adminService.createUpdateDoctor(this.doctor).subscribe({
-            next: (resDoc: DefaultResponse<string>) => {
-              Swal.fire({
-                icon: 'success',
-                html: resDoc.message,
-              });
-
-              this.dialogRef.close(true);
-            },
-          });
-        } else if (this.user.idTipoUsuario == UserRole.Paciente) {
-          this.patient.idUsuario = res.data.idUsuario;
-          this.patient.idMedico = this.idUsuarioAuth;
-
-          this.adminService.createUpdatePatient(this.patient).subscribe({
-            next: (resPat: DefaultResponse<string>) => {
-              Swal.fire({
-                icon: 'success',
-                html: resPat.message,
-              });
-
-              this.dialogRef.close(true);
-            },
-          });
-        } else {
-          Swal.fire({
-            icon: 'success',
-            html: res.message,
-          });
-
-          this.dialogRef.close(true);
+        if (!this.param) {
+          this.archiveForm.patchValue({'idUsuario': res.data.idUsuario});
         }
+        // this.adminService.uploadImages(this.archiveForm.getRawValue()).subscribe({
+        //   next: (res: DefaultResponse<string>) => {
+        //     Swal.fire({
+        //       icon: 'success',
+        //       html: res.message,
+        //     }).then();
+        //   },
+        //   error: (err) => {
+        //     this.gfs.showErrorAlert('Hubo un error al Insertar las imagenes', err);
+        //   },
+        // });
+        this.gfs.showAlert(this.param ? 'Paciente actualizado con éxito' : 'Paciente creado con éxito.', 'Correcto!');
+        this.router.navigate(['admin/user-list']).then();
+      },
+      error: (err) => {
+        this.gfs.showErrorAlert('Hubo un error al Crear/editar el Usuario', err);
       },
     });
   }
 
   displayFn(settlement: Settlement): string {
-    return settlement && settlement.nombreAsentamiento
-      ? settlement.nombreAsentamiento
-      : '';
+    return settlement && settlement.asentamiento ? settlement.asentamiento : '';
   }
 
-  closeDialog(): void {
-    this.dialog.closeAll();
+  searchSettlementsByKeyPress(event: Event): void {
+    this.keyPress$.next(event);
   }
+
+  setSelectedSettlement(value: Settlement): void {
+    this.user.idAsentamiento = value ? value.idAsentamiento : undefined;
+    this.userForm.patchValue({'idAsentamiento': this.user.idAsentamiento});
+  }
+
 }

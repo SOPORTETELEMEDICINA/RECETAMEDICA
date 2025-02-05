@@ -1,0 +1,103 @@
+<section class="content">
+  <div class="content-block">
+    <div class="block-header">
+      <app-breadcrumb
+        [active_item]="'Catalogos'"
+        [items]="['Catalogos']"
+        [title]="'Configuración'"
+      ></app-breadcrumb>
+    </div>
+
+    <app-top-widgets/>
+
+    <div class="row clearfix">
+      <div class="col-lg-12 col-md-12">
+        <div class="card">
+          <mat-tab-group>
+
+            <mat-tab>
+              <ng-template mat-tab-label>
+                <mat-icon class="example-tab-icon msr-2">apps</mat-icon>
+                Básicos
+              </ng-template>
+              <ng-template matTabContent>
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                  <div class="project_widget">
+                    <div class="body">
+                      <app-basic-list/>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </mat-tab>
+
+            <mat-tab>
+              <ng-template mat-tab-label>
+                <mat-icon class="example-tab-icon msr-2">assignment</mat-icon>
+                Diagnósticos
+              </ng-template>
+              <ng-template matTabContent>
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                  <div class="project_widget">
+                    <div class="body">
+                      <app-diagnostics-list/>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </mat-tab>
+
+            <mat-tab>
+              <ng-template mat-tab-label>
+                <mat-icon class="example-tab-icon msr-2">local_post_office</mat-icon>
+                Código Postal
+              </ng-template>
+              <ng-template matTabContent>
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                  <div class="project_widget">
+                    <div class="body">
+                      <app-postal-code-list/>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </mat-tab>
+
+            <mat-tab>
+              <ng-template mat-tab-label>
+                <mat-icon class="example-tab-icon msr-2">map</mat-icon>
+                Entidades
+              </ng-template>
+              <ng-template matTabContent>
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                  <div class="project_widget">
+                    <div class="body">
+                      <app-entity-list/>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </mat-tab>
+
+            <mat-tab>
+              <ng-template mat-tab-label>
+                <mat-icon class="example-tab-icon msr-2">my_location</mat-icon>
+                Municipios
+              </ng-template>
+              <ng-template matTabContent>
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                  <div class="project_widget">
+                    <div class="body">
+                      <app-township-list/>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </mat-tab>
+
+          </mat-tab-group>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

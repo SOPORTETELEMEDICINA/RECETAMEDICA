@@ -1,0 +1,156 @@
+<!--suppress AngularNgOptimizedImage -->
+<section class="content">
+  <div class="content-block">
+    <div class="block-header">
+      <app-breadcrumb [active_item]="'Perfil'" [title]="'Sucursales'"></app-breadcrumb>
+    </div>
+    <div class="row clearfix">
+      <div class="col-lg-4 col-md-12">
+        <div class="card">
+          <div class="m-b-20">
+            <div class="contact-grid">
+              <div class="profile-header bg-dark">
+                <div class="user-name">{{ branch.status }}</div>
+              </div>
+              <img
+                [src]="'data:image/png;base64,' + gemp.logoBase64"
+                alt="{{gemp.nombre}}"
+                class="user-img"
+              />
+              <p>Grupo Empresarial</p>
+              <p>{{ gemp.nombre }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-8 col-md-12">
+        <div class="card">
+          <mat-tab-group>
+            <mat-tab>
+              <ng-template mat-tab-label>
+                <mat-icon class="example-tab-icon msr-2">face</mat-icon>
+                Información sucursal
+              </ng-template>
+              <div class="col-lg-12 col-md-12 col-sm-12">
+                <div class="project_widget">
+                  <div class="header">
+                    <h2><strong>General</strong></h2>
+                  </div>
+                  <div class="body">
+                    <div class="row">
+                      <div class="col-md-6 col-6 b-r">
+                        <strong>Nombre</strong>
+                        <br>
+                        <p
+                          class="text-muted">{{ branch.nombre }}</p>
+                      </div>
+                      <div class="col-md-6 col-6 b-r">
+                        <strong>Registro Sanitario</strong>
+                        <br>
+                        <p class="text-muted">{{ branch.registroSanitario }}</p>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6 col-6 b-r">
+                        <strong>Domicilio</strong>
+                        <br>
+                        <p
+                          class="text-muted">{{ branch.domicilio }}</p>
+                      </div>
+                      <div class="col-md-6 col-6 b-r">
+                        <strong>Código Postal</strong>
+                        <br>
+                        <p class="text-muted">{{ branch.codigoPostal }}</p>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6 col-6 b-r">
+                        <strong>Tipo Asentamiento</strong>
+                        <br>
+                        <p
+                          class="text-muted">{{ branch.tipoAsentamiento }}</p>
+                      </div>
+                      <div class="col-md-6 col-6 b-r">
+                        <strong>Nombre Asentamiento</strong>
+                        <br>
+                        <p class="text-muted">{{ branch.nombreAsentamiento }}</p>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6 col-6 b-r">
+                        <strong>Responsable</strong>
+                        <br>
+                        <p class="text-muted">{{ branch.responsable }}</p>
+                      </div>
+                      <div class="col-md-6 col-6 b-r">
+                        <strong>Cédula del responsable</strong>
+                        <br>
+                        <p class="text-muted">{{ branch.cedulaResponsable }}</p>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6 col-6 b-r">
+                        <strong>Telefono del responsable</strong>
+                        <br>
+                        <p class="text-muted">{{ branch.telefonoResponsable | formatMobile }}</p>
+                      </div>
+                      <div class="col-md-6 col-6 b-r">
+                        <strong>Email del responsable</strong>
+                        <br>
+                        <p class="text-muted">{{ branch.emailResponsable }}</p>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6 col-6 b-r">
+                        <strong>Municipio</strong>
+                        <br>
+                        <p class="text-muted">{{ branch.municipio }}</p>
+                      </div>
+                      <div class="col-md-6 col-6 b-r">
+                        <strong>Ciudad</strong>
+                        <br>
+                        <p class="text-muted">{{ branch.ciudad }}</p>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6 col-6 b-r">
+                        <strong>Estado</strong>
+                        <br>
+                        <p class="text-muted">{{ branch.estado }}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </mat-tab>
+
+            <mat-tab>
+              <ng-template mat-tab-label>
+                <mat-icon class="example-tab-icon msr-2">account_box</mat-icon>
+                Pacientes
+              </ng-template>
+              <app-patient-by-branch [idBranch]="param"></app-patient-by-branch>
+            </mat-tab>
+
+            <mat-tab>
+              <ng-template mat-tab-label>
+                <mat-icon class="example-tab-icon msr-2">medication</mat-icon>
+                Medicos
+              </ng-template>
+              <app-doctor-by-branch [idBranch]="param"></app-doctor-by-branch>
+            </mat-tab>
+
+            <mat-tab>
+              <ng-template mat-tab-label>
+                <mat-icon class="example-tab-icon msr-2">group</mat-icon>
+                Personal
+              </ng-template>
+              <app-user-by-branch [idBranch]="param"></app-user-by-branch>
+            </mat-tab>
+
+          </mat-tab-group>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

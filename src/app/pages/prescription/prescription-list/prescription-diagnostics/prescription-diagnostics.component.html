@@ -1,0 +1,40 @@
+<div class="addContainer">
+  <div class="modalHeader">
+    <div class="editRowModal">
+      <div class="modalHeader clearfix">
+        <div class="modal-about"> Antecedentes destacables de: <br> <span
+          style="color: #00a5b8">{{ dialogTitle }}</span>
+        </div>
+      </div>
+    </div>
+    <button (click)="dialogRef.close()" aria-label="Close dialog" class="modal-close-button" mat-icon-button>
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div mat-dialog-content>
+    <div [hidden]="patologias.length < 1" class="col-lg-12 col-xl-12 col-md-12 col-sm-12 m-t-20">
+      <mat-list>
+        <h5>Patologías</h5>
+        <mat-list-item *ngFor="let row of patologias">* {{ row.nameCIM10 }}</mat-list-item>
+      </mat-list>
+    </div>
+    <div [hidden]="alergias.length < 1" class="col-lg-12 col-xl-12 col-md-12 col-sm-12 m-t-20">
+      <mat-list>
+        <h5>Alergias</h5>
+        <mat-list-item *ngFor="let row of alergias">* {{
+            row.nameAllergy
+          }}
+        </mat-list-item>
+      </mat-list>
+    </div>
+    <div [hidden]="moleculas.length < 1" class="col-lg-12 col-xl-12 col-md-12 col-sm-12 m-t-20">
+      <mat-list>
+        <h5>Moleculas</h5>
+        <mat-list-item *ngFor="let row of moleculas">* {{
+            row.nameMolecule
+          }}
+        </mat-list-item>
+      </mat-list>
+    </div>
+  </div>
+</div>

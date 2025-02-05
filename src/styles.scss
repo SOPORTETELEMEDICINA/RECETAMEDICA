@@ -1,7 +1,51 @@
 :root {
-    --mdc-filled-button-container-color: #00a5b8; /* Cambia el color primario */
+    --mdc-filled-button-container-color: #00a5b8;
 }
 
 .pointer {
     cursor: pointer;
+}
+
+.mat-dialog-container {
+  max-width: none !important;
+}
+
+.mat-mdc-row .mat-mdc-cell {
+  border-bottom: 1px solid black;
+  border-top: 1px solid transparent;
+  padding: 8px 14px;
+  transition: background-color 0.3s ease;
+}
+
+.mat-mdc-row:hover .mat-mdc-cell {
+  background-color: lightgray;
+}
+.block {
+  display: flex;
+  flex-direction: column;
+  gap: 4px; /* Ajusta el valor para el espacio deseado */
+}
+
+.block .badge {
+  width: 100px;
+}
+
+.prop_one {
+  font-weight: bold;
+}
+
+.prop_two {
+  font-style: italic;
+}
+
+.prop_three {
+  color: #00a5b8;
+}
+
+.prop_four {
+  color: #003359;
+}
+
+.mat-mdc-header-cell {
+  color: gray;
 }

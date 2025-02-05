@@ -1,0 +1,160 @@
+<!--suppress AngularNgOptimizedImage -->
+<section class="content">
+  <div class="content-block">
+    <div class="block-header">
+      <app-breadcrumb [active_item]="'Perfil'" [title]="'Doctor'"></app-breadcrumb>
+    </div>
+    <div class="row clearfix">
+      <div class="col-lg-4 col-md-12">
+        <div class="card">
+          <div class="m-b-20">
+            <div class="contact-grid">
+              <div class="profile-header bg-dark">
+                <div class="user-name">{{ doctor.nombres }} {{ doctor.primerApellido }} {{ doctor.segundoApellido }}
+                </div>
+                <div class="name-center">{{ userRole }}</div>
+              </div>
+              <img alt="" class="user-img" src="{{userImg}}">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-8 col-md-12">
+        <div class="card">
+          <mat-tab-group>
+            <mat-tab>
+              <ng-template mat-tab-label>
+                <mat-icon class="example-tab-icon msr-2">face</mat-icon>
+                Información usuario: {{ doctor.usr }}
+              </ng-template>
+              <div class="col-lg-12 col-md-12 col-sm-12">
+                <div class="project_widget">
+                  <div class="header">
+                    <h2><strong>General</strong></h2>
+                  </div>
+                  <div class="body">
+                    <div class="row">
+                      <div class="col-md-6 col-6 b-r">
+                        <strong>Nombre Completo</strong>
+                        <br>
+                        <p
+                          class="text-muted">{{ doctor.nombres }} {{ doctor.primerApellido }} {{ doctor.segundoApellido }}</p>
+                      </div>
+                      <div class="col-md-6 col-6 b-r">
+                        <strong>Correo</strong>
+                        <br>
+                        <p class="text-muted">{{ doctor.email }}</p>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6 col-6 b-r">
+                        <strong>Universidad</strong>
+                        <br>
+                        <p
+                          class="text-muted">{{ doctor.universidad }}</p>
+                      </div>
+                      <div class="col-md-6 col-6 b-r">
+                        <strong>Cedula General</strong>
+                        <br>
+                        <p class="text-muted">{{ doctor.cedulaGeneral }}</p>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6 col-6 b-r">
+                        <strong>Especialidad</strong>
+                        <br>
+                        <p
+                          class="text-muted">{{ doctor.especialidad }}</p>
+                      </div>
+                      <div class="col-md-6 col-6 b-r">
+                        <strong>Cedula Especialidad</strong>
+                        <br>
+                        <p class="text-muted">{{ doctor.cedulaEspecialidad }}</p>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6 col-6 b-r">
+                        <strong>Teléfono</strong>
+                        <br>
+                        <p class="text-muted">{{ doctor.movil | formatMobile }}</p>
+                      </div>
+                      <div class="col-md-6 col-6 b-r">
+                        <strong>Domicilio</strong>
+                        <br>
+                        <p class="text-muted">{{ doctor.domicilio }}</p>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6 col-6 b-r">
+                        <strong>Tipo Asentamiento</strong>
+                        <br>
+                        <p class="text-muted">{{ doctor.tipoAsentamiento }}</p>
+                      </div>
+                      <div class="col-md-6 col-6 b-r">
+                        <strong>Asentamiento</strong>
+                        <br>
+                        <p class="text-muted">{{ doctor.asentamiento }}</p>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6 col-6 b-r">
+                        <strong>Codigo Postal</strong>
+                        <br>
+                        <p class="text-muted">{{ doctor.codigoPostal }}</p>
+                      </div>
+                      <div class="col-md-6 col-6 b-r">
+                        <strong>Estado</strong>
+                        <br>
+                        <p class="text-muted">{{ doctor.estado }}</p>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6 col-6 b-r">
+                        <strong>Municipio</strong>
+                        <br>
+                        <p class="text-muted">{{ doctor.municipio }}</p>
+                      </div>
+                      <div class="col-md-6 col-6 b-r">
+                        <strong>Ciudad</strong>
+                        <br>
+                        <p class="text-muted">{{ doctor.ciudad }}</p>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6 col-6 b-r">
+                        <strong>Grupo Empresarial</strong>
+                        <br>
+                        <p class="text-muted">{{ doctor.grupoEmpresarial }}</p>
+                      </div>
+                      <div class="col-md-6 col-6 b-r">
+                        <strong>Sucursal</strong>
+                        <br>
+                        <p class="text-muted">{{ doctor.sucursal }}</p>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6 col-6 b-r">
+                        <strong>Horario</strong>
+                        <br>
+                        <p class="text-muted">{{ doctor.horario }}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </mat-tab>
+
+            <mat-tab>
+              <ng-template mat-tab-label>
+                <mat-icon class="example-tab-icon msr-2">account_box</mat-icon>
+                Pacientes
+              </ng-template>
+              <app-patient-by-doctor [idDoctor]="param"></app-patient-by-doctor>
+            </mat-tab>
+
+          </mat-tab-group>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

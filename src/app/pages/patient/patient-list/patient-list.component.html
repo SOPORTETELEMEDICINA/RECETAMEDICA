@@ -1,148 +1,183 @@
 <section class="content">
   <div class="content-block">
-    <div class="block-header">
-      <!-- breadcrumb -->
-      <app-breadcrumb
-        [title]="'Pacientes'"
-        [items]="['Principal']"
-        [active_item]="'Pacientes'"
-      ></app-breadcrumb>
-    </div>
 
-    <div class="row" style="height: 10px">
-      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-        <div class="card" style="background-color: #00a5b8"></div>
+    @if (control) {
+      <div class="block-header">
+        <app-breadcrumb
+          [active_item]="'Personal'"
+          [items]="['Admin']"
+          [title]="'Personal'"
+        ></app-breadcrumb>
       </div>
-    </div>
-    <!-- Basic Examples -->
-    <div class="row clearfix">
+    } @else {
+      <div class="block-header">
+        <app-breadcrumb
+          [active_item]="'Dashboard'"
+          [items]="[]"
+          [title]="'Dashboard'"
+        ></app-breadcrumb>
+      </div>
+    }
+
+    <app-top-widgets [control]=1></app-top-widgets>
+
+    <div class="row">
       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="card">
-          <div class="body">
-            <div class="row">
-              <div class="col-sm-12">
-                <div class="ngxTableHeader">
-                  <ul class="header-buttons-left ms-0 mb-0">
-                    <li class="dropdown m-l-20">
-                      <label for="search-input"
-                        ><i class="material-icons search-icon">search</i></label
-                      >
-                      <input
-                        placeholder="Buscar"
-                        type="text"
-                        class="browser-default search-field"
-                        (keyup)="filterDatatable($event)"
-                        aria-label="Buscar"
-                      />
-                    </li>
-                  </ul>
-                  <ul class="header-buttons">
-                    <li>
-                      <button
-                        mat-mini-fab
-                        color="primary"
-                        (click)="openUserModal()"
-                      >
-                        <mat-icon>add</mat-icon>
-                      </button>
-                    </li>
-                  </ul>
+          <div class="materialTableHeader">
+            <div class="left">
+              <ul class="header-buttons-left ms-0">
+                <li class="tbl-search-box">
+                  <label><i class="material-icons search-icon">search</i></label>
+                  <input
+                    #filter
+                    aria-autocomplete="none"
+                    aria-label="Search box" autocomplete="nope" class="browser-default search-field" placeholder="Buscar"
+                    type="text">
+                </li>
+              </ul>
+            </div>
+            <div class="right">
+              <ul class="tbl-export-btn">
+                <li class="tbl-header-btn">
+                  <div class="m-l-10" matTooltip="ADD">
+                    <button (click)="addNew()" color="primary" mat-mini-fab>
+                      <mat-icon>add</mat-icon>
+                    </button>
+                  </div>
+                </li>
+                <li class="tbl-header-btn">
+                  <div class="m-l-10" matTooltip="REFRESH">
+                    <button (click)="refresh()" color="primary" mat-mini-fab>
+                      <mat-icon>refresh</mat-icon>
+                    </button>
+                  </div>
+                </li>
+                <li>
+                  <div class="export-button m-l-10" matTooltip="XLSX">
+                    <img (click)="exportExcel()" alt="" height="512" ngSrc="assets/images/icons/xlsx.png" width="512"/>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="body overflow-auto">
+            <div class="responsive_table">
+              <table [dataSource]="dataSource" class="mat-cell advance-table" mat-table matSort>
+
+                <ng-container matColumnDef="idPaciente">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
+                  <mat-cell *matCellDef="let row" matTooltip="{{row.idPaciente}}">{{ row.idPaciente }}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="name">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Nombres</mat-header-cell>
+                  <mat-cell (click)="goToProfile(row)" *matCellDef="let row" matTooltip="{{row.nombres}}"><span
+                    class="mobile-label">Nombres:</span>
+                    <div class="block">
+                      <span class="prop_one">{{ row.nombres }}</span>
+                      @if (row.genero === 'M') {
+                        <span class="badge badge-solid-blue">
+                        {{ row.genero }}</span>
+                      }
+                      @if (row.genero === 'F') {
+                        <span class="badge badge-solid-pink">
+                        {{ row.genero }}</span>
+                      }
+                      <span class="prop_two">Edad: {{ row.edad }} años</span>
+                    </div>
+                  </mat-cell>
+                </ng-container>
+
+
+                <ng-container matColumnDef="bDate">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha de Nacimiento</mat-header-cell>
+                  <mat-cell *matCellDef="let row" matTooltip="{{row.fechaNacimiento}}">
+                    <span class="mobile-label">Fecha de Nacimiento:</span> {{ row.fechaNacimiento }}
+                  </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="email">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Correo</mat-header-cell>
+                  <mat-cell *matCellDef="let row" matTooltip="{{row.email}}">
+                    <span class="mobile-label">Correo:</span>
+                    <a href="mailto:{{row.email}}">{{ row.email }}</a>
+                  </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="mobile">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Telefono:</mat-header-cell>
+                  <mat-cell *matCellDef="let row" matTooltip="{{row.movil}}">
+                    <span class="mobile-label"></span>
+                    {{ row.movil | formatMobile }}
+                  </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="status">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Estatus</mat-header-cell>
+                  <mat-cell *matCellDef="let row" matTooltip="{{row.status}}"><span class="mobile-label">Estatus:</span>
+                    @if (row.status === 'Activo') {
+                      <span class="badge badge-solid-green">
+                        {{ row.status }}</span>
+                    } @else {
+                      <span class="badge badge-solid-red">
+                        {{ row.status }}</span>
+                    }
+                  </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="antecedentes">
+                  <mat-header-cell *matHeaderCellDef class="pr-0">Antecedentes</mat-header-cell>
+                  <mat-cell *matCellDef="let row; let i = index;" class="pr-0">
+                    <span class="mobile-label">Antecedentes:</span>
+                    <button
+                      (click)="$event.stopPropagation(); showDiagnostics(row)"
+                      [disabled]="
+                      (!row.alergias || row.alergias.length === 0) &&
+                      (!row.molecules || row.molecules.length === 0) &&
+                      (!row.patologias || row.patologias.length === 0) "
+                      class="tbl-fav-std"
+                      mat-icon-button>
+                      <app-feather-icons [icon]="'layers'"></app-feather-icons>
+                    </button>
+                  </mat-cell>
+                </ng-container>
+
+                <!-- actions -->
+                <ng-container matColumnDef="actions">
+                  <mat-header-cell *matHeaderCellDef class="pr-0">Actions</mat-header-cell>
+                  <mat-cell *matCellDef="let row; let i=index;" class="pr-0">
+                    <button (click)="$event.stopPropagation(); editCall(row)" class="tbl-action-btn"
+                            mat-icon-button>
+                      <app-feather-icons [class]="'tbl-fav-edit'" [icon]="'edit'"></app-feather-icons>
+                    </button>
+                    <button (click)="$event.stopPropagation(); deleteItem(row)" *ngIf="isUserAdmin"
+                            class="tbl-action-btn" mat-icon-button>
+                      <app-feather-icons [class]="'tbl-fav-delete'" [icon]="'trash-2'"></app-feather-icons>
+                    </button>
+                  </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;" matRipple>
+                </mat-row>
+              </table>
+              <!-- Loading spinner -->
+              @if (data?.isTblLoading) {
+                <div class="tbl-spinner">
+                  <mat-progress-spinner color="primary" [diameter]="40" mode="indeterminate">
+                  </mat-progress-spinner>
                 </div>
-                <ngx-datatable
-                  #table
-                  class="material"
-                  [rows]="data"
-                  [columns]="columns"
-                  [sortType]="SortType.multi"
-                  [columnMode]="'force'"
-                  [headerHeight]="50"
-                  [footerHeight]="50"
-                  [rowHeight]="80"
-                  [limit]="10"
-                >
-                  <ngx-datatable-column prop="nombres" name="Nombre">
-                    <ng-template
-                      let-value="value"
-                      let-row="row"
-                      let-rowIndex="rowIndex"
-                      ngx-datatable-cell-template
-                    >
-                      <strong>{{ row.nombres }} {{ row.primerApellido }}
-                        {{ row.segundoApellido }}</strong>
-                      <br />
-                      <em style="font-size: 13px">{{ row.genero }}</em>
-                      <br />
-                      <em style="font-size: 13px">{{ row.edad }} años</em>
-                    </ng-template>
-                  </ngx-datatable-column>
-
-                  <ngx-datatable-column
-                    prop="fechaNacimiento"
-                    name="Fecha de Nacimiento"
-                  ></ngx-datatable-column>
-
-                  <ngx-datatable-column prop="email" name="Correo">
-                    <ng-template
-                      let-value="value"
-                      let-row="row"
-                      let-rowIndex="rowIndex"
-                      ngx-datatable-cell-template
-                    >
-                      <a href="mailto:{{ row.email }}">{{ row.email }}</a>
-                    </ng-template>
-                  </ngx-datatable-column>
-
-                  <ngx-datatable-column
-                    prop="movil"
-                    name="Telefono"
-                  ></ngx-datatable-column>
-
-                  <ngx-datatable-column prop="status" name="Estatus">
-                    <ng-template
-                      let-value="value"
-                      let-row="row"
-                      let-rowIndex="rowIndex"
-                      ngx-datatable-cell-template
-                    >
-                      <div
-                        [ngClass]="{
-                                  'badge col-red': row.status == 'Inactivo',
-                                  'badge col-green': row.status == 'Activo'
-                                }"
-                      >
-                        {{ row.status }}
-                      </div>
-                    </ng-template>
-                  </ngx-datatable-column>
-
-                  <ngx-datatable-column
-                    name="Acciones"
-                    [sortable]="false"
-                    [width]="120"
-                  >
-                    <ng-template
-                      let-value="value"
-                      let-row="row"
-                      let-rowIndex="rowIndex"
-                      ngx-datatable-cell-template
-                    >
-                      <button mat-icon-button class="tbl-action-btn">
-                        <app-feather-icons
-                          [icon]="'edit'"
-                          [class]="'tbl-fav-edit'"
-                        ></app-feather-icons>
-                      </button>
-                      <button mat-icon-button class="tbl-action-btn">
-                        <app-feather-icons
-                          [icon]="'trash-2'"
-                          [class]="'tbl-fav-delete'"
-                        ></app-feather-icons>
-                      </button>
-                    </ng-template>
-                  </ngx-datatable-column>
-                </ngx-datatable>
-                <!-- Add Record Modal Window -->
-              </div>
+              }
+              @if (!data?.isTblLoading) {
+                <div class="no-results" [style.display]="dataSource.renderedData.length === 0 ? '' : 'none'">
+                  No hay resultados
+                </div>
+              }
+              <mat-paginator [length]="dataSource.filteredData.length" [pageIndex]="0"
+                             [pageSizeOptions]="[5, 10, 25, 100]"
+                             [pageSize]="10">
+              </mat-paginator>
             </div>
           </div>
         </div>

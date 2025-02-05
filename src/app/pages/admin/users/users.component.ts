@@ -1,158 +1,192 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  UntypedFormGroup,
-} from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatOptionModule } from '@angular/material/core';
-import { MatSelectModule } from '@angular/material/select';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { BreadcrumbComponent } from '@shared/components/breadcrumb/breadcrumb.component';
-import { UserEditCreateComponent } from './user-edit-create/user-edit-create.component';
-
-import {
-  DatatableComponent,
-  SortType,
-  NgxDatatableModule,
-} from '@swimlane/ngx-datatable';
-import { User } from '@core/models/User';
-import { MatDialog } from '@angular/material/dialog';
-import { AdminService } from '@core/http/admin.service';
-import { DefaultResponse } from '@core/models/Http/DefaultResponse';
-import { NgFor } from '@angular/common';
-import { UserDetails } from '@core/models/UserDetails';
-import {FeatherIconsComponent} from "@shared/components/feather-icons/feather-icons.component";
+import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {MatDialog} from '@angular/material/dialog';
+import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
+import {MatSort, MatSortModule} from '@angular/material/sort';
+import {fromEvent} from 'rxjs';
+import {TableElement, TableExportUtil, UnsubscribeOnDestroyAdapter,} from '@shared';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatRippleModule} from '@angular/material/core';
+import {FeatherIconsComponent} from '@shared/components/feather-icons/feather-icons.component';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatTableModule} from '@angular/material/table';
+import {MatIconModule} from '@angular/material/icon';
+import {MatButtonModule} from '@angular/material/button';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import {BreadcrumbComponent} from '@shared/components/breadcrumb/breadcrumb.component';
+import {BusinessGroupService} from "@core/service/business-group.service";
+import {UserService} from "@core/http/table-data-services/User.service";
+import {UserDetails} from "@core/models/UserDetails";
+import {FormatMobilePipe} from "@core/pipes/format-mobile.pipe";
+import {Router} from "@angular/router";
+import {UserDataSource} from "@core/data-source/UserDataSource";
+import {DoDeleteComponent} from "@shared/components/do-delete/do-delete.component";
+import {GeneralFunctionsService} from "@core/service/generalFunctions.service";
+import {UserRole} from "@core/models/Enums/UserRole";
+import {BranchGroupService} from "@core/service/branch-group.service";
+import {TopWidgetsComponent} from "@shared/components/top-widgets/top-widgets.component";
 
 @Component({
   selector: 'app-users',
   standalone: true,
   imports: [
     BreadcrumbComponent,
+    MatTooltipModule,
     MatButtonModule,
     MatIconModule,
-    NgxDatatableModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatOptionModule,
-    NgFor,
+    MatTableModule,
+    MatSortModule,
+    MatCheckboxModule,
     FeatherIconsComponent,
+    MatRippleModule,
+    MatProgressSpinnerModule,
+    MatPaginatorModule,
+    FormatMobilePipe,
+    TopWidgetsComponent
   ],
   templateUrl: './users.component.html',
   styleUrl: './users.component.scss',
 })
-export class UsersComponent implements OnInit {
-  @ViewChild(DatatableComponent, { static: false }) table2!: DatatableComponent;
-  @ViewChild(DatatableComponent, { static: false }) table!: DatatableComponent;
+export class UsersComponent
+  extends UnsubscribeOnDestroyAdapter
+  implements OnInit {
 
-  SortType = SortType;
-  register?: UntypedFormGroup;
-
-  selectedRowData?: selectRowInterface;
-
-  columns = [
-    {
-      prop: 'empresa',
-      name: 'Empresa',
-    },
-    {
-      prop: 'nombreAsentamiento',
-      name: 'Asentamiento',
-    },
-    {
-      prop: 'nombreSucursal',
-      name: 'Sucursal',
-    },
+  displayedColumns = [
+    'nombre',
+    'tipoUsuario',
+    'direccion',
+    'correo',
+    'asentamiento',
+    'actions'
   ];
-
-  data: UserDetails[] = [];
-  filteredData: UserDetails[] = [];
+  idSucursal = '';
+  data?: UserService;
+  dataSource!: UserDataSource;
+  index?: number;
+  idUsuario?: string;
+  user?: UserDetails;
+  businessGroupId: string | null = null;
+  branchGroupId: string | null = null;
+  @ViewChild(MatPaginator, {static: true})
+  paginator!: MatPaginator;
+  @ViewChild(MatSort, {static: true})
+  sort!: MatSort;
+  @ViewChild('filter', {static: true}) filter?: ElementRef;
+  @Input() control: number = 1;
 
   constructor(
-    private dialogModel: MatDialog,
-    private adminService: AdminService
-  ) {}
-
-  ngOnInit(): void {
-    this.getUsers();
+    public httpClient: HttpClient,
+    public dialog: MatDialog,
+    public userService: UserService,
+    private gfs: GeneralFunctionsService,
+    private router: Router,
+    private businessGroupService: BusinessGroupService,
+    private branchGroupService: BranchGroupService,
+  ) {
+    super();
   }
 
-  getUsers() {
-    this.adminService.getUsers().subscribe({
-      next: (res: DefaultResponse<UserDetails[]>) => {
-        this.data = [...res.data];
-        this.filteredData = [...res.data];
-      },
+  ngOnInit() {
+    this.businessGroupService.businessGroupId$.subscribe((id) => {
+      const userDetails = JSON.parse(<string>localStorage.getItem('userDetails'));
+      if (userDetails.idTipoUsuario == UserRole.Supervisor_Sucursales) {
+        this.idSucursal = userDetails.idSucursal
+      }
+      this.businessGroupId = id;
+      this.loadData();
+    });
+
+    this.branchGroupService.branchGroupId$.subscribe((id) => {
+      const userDetails = JSON.parse(<string>localStorage.getItem('userDetails'));
+      if (userDetails.idTipoUsuario == UserRole.Supervisor_Sucursales) {
+        this.idSucursal = userDetails.idSucursal
+        this.idSucursal = id!;
+      }
+      this.branchGroupId = id;
+      this.loadData();
     });
   }
 
-  filterDatatable(event: any) {
-    // obtener el valor del input y convertirlo a minúsculas
-    const val = event.target.value.toLowerCase();
+  refresh() {
+    this.ngOnInit();
+  }
 
-    // si no hay valor en el input, restaurar todos los datos
-    if (!val) {
-      this.data = [...this.filteredData]; // restaurar los datos originales
-      this.table.offset = 0; // regresar a la primera página
+  addNew() {
+    this.router.navigate(['admin/create-edit']).then();
+  }
 
-      console.log(this.data);
+  editCall(row: UserDetails) {
+    this.router.navigate(['admin/create-edit/' + row.idUsuario + '/' + row.idGEMP]).then();
+  }
 
-      return;
-    }
+  goToProfile(row: UserDetails) {
+    this.router.navigate(['admin/profile/' + row.idUsuario + '/' + row.idGEMP]).then();
+  }
 
-    // obtener los nombres de las claves de cada columna en el dataset
-    const keys = Object.keys(this.data[0]);
+  deleteItem(row: UserDetails) {
+    this.idUsuario = row.idUsuario;
 
-    // asignar los resultados filtrados al datatable activo
-    this.data = this.filteredData.filter((item: any) => {
-      // iterar sobre los datos de cada columna en la fila
-      for (let key of keys) {
-        const value = item[key];
-        // verificar si hay una coincidencia
-        if (value && value.toString().toLowerCase().indexOf(val) !== -1) {
-          return true; // se encontró coincidencia, mantener el registro
+    const dialogRef = this.dialog.open(DoDeleteComponent, {
+      data: {
+        toDelete: 'Usuario',
+        id: this.idUsuario,
+        name: row.nombres,
+        actionService: (id: string) => this.userService.deleteUser(id),
+      }
+    });
+    this.subs.sink = dialogRef.afterClosed().subscribe((result) => {
+      if (result === 1) {
+        const foundIndex = this.data?.dataChange.value.findIndex(
+          (x): boolean => x.idUsuario === this.idUsuario
+        );
+        if (foundIndex != null && this.data) {
+          this.data.dataChange.value.splice(foundIndex, 1);
+
+          this.refreshTable();
+          this.gfs.showAlert('Paciente eliminado correctamente', 'Correcto')
         }
       }
-      return false; // no hay coincidencia, eliminar el registro
-    });
-
-    // siempre regresar a la primera página cuando el filtro cambie
-    this.table.offset = 0;
-  }
-
-  deleteRow(row: User) {
-    this.data = this.arrayRemove(this.data, row.folio);
-  }
-
-  arrayRemove(array: UserDetails[], id: string) {
-    return array.filter(function (element: UserDetails) {
-      return element.idUsuario != id;
     });
   }
 
-  openUserModal(user?: UserDetails) {
-    this.dialogModel
-      .open(UserEditCreateComponent, {
-        data: user,
-        disableClose: false,
-        maxWidth: '100vw',
-        maxHeight: '100vw',
-        width: '850px',
-      })
-      .afterClosed()
-      .subscribe((res) => {
-        if (res) this.getUsers();
-      });
+  exportExcel() {
+    const exportData: Partial<TableElement>[] =
+      this.dataSource.filteredData.map((x: UserDetails) => ({
+        Nombre: x.nombres,
+        Tipo: x.tipoUsuario,
+        Telefono: x.movil,
+        Direccion: x.domicilio,
+        Municipio: x.municipio,
+        CP: x.codigoPostal,
+        Correo: x.email,
+        Asentamiento: x.nombreAsentamiento,
+        Sucursal: x.nombreSucursal
+      }));
+    TableExportUtil.exportToExcel(exportData, 'excel');
+  }
+
+  public loadData() {
+    this.data = new UserService(this.httpClient, this.gfs);
+    this.dataSource = new UserDataSource(
+      this.businessGroupId,
+      this.data,
+      this.paginator,
+      this.sort,
+      this.idSucursal
+    );
+    this.subs.sink = fromEvent(this.filter?.nativeElement, 'keyup').subscribe(
+      () => {
+        if (!this.dataSource) {
+          return;
+        }
+        this.dataSource.filter = this.filter?.nativeElement.value;
+      }
+    );
+  }
+
+  private refreshTable() {
+    this.paginator._changePageSize(this.paginator.pageSize);
   }
 }
 
-export interface selectRowInterface {
-  img: string;
-  firstName: string;
-  lastName: string;
-}
+

@@ -1,1 +1,21 @@
-<p>profile works!</p>
+<section class="content">
+  <div class="content-block">
+    <div class="block-header">
+      <app-breadcrumb [active_item]="'Perfil'" [items]="['Perfil']" [title]="'Perfil'"></app-breadcrumb>
+    </div>
+
+    <app-top-widgets/>
+
+    @switch (tipoUsuario) {
+      @case (UserRole.Medico) {
+        <app-profile-doctor [idUsuario]="idUsuario"/>
+      }
+      @case (UserRole.Paciente) {
+        <app-profile-patient [idGemp]="idGemp"/>
+      }
+      @default {
+        <app-profile-user [idGemp]="idGemp"/>
+      }
+    }
+  </div>
+</section>

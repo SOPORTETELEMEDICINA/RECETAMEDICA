@@ -6,6 +6,10 @@
   margin-top: 5px;
   padding: 26px 20px 30px;
   transition: 0.2s;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
 }
 
 .file-input {
@@ -17,6 +21,11 @@
   cursor: pointer;
   opacity: 0;
 }
+
+.delete-btn {
+  white-space: nowrap;
+}
+
 .file-msg {
   display: inline-block;
   margin-left: 5px;

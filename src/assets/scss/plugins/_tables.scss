@@ -220,6 +220,18 @@
     width: 20px !important;
   }
 }
+.tbl-fav-std {
+  display: inline !important;
+  .feather {
+    height: 20px !important;
+    width: 20px !important;
+  }
+  &.disabled,
+  &:disabled {
+    color: silver !important;
+  }
+}
+
 .tbl-fav-delete {
   color: #ff5200;
   display: inline !important;
@@ -559,8 +571,8 @@ tr.group:hover {
 .materialTableHeader {
   -webkit-box-align: center;
   align-items: center;
-  border-color: #dae1f3;
-  background-color: #dae1f3;
+  border-color: #00A5B8 ;
+  background-color: #00A5B8;
   display: flex;
   flex-wrap: wrap;
   text-align: center;

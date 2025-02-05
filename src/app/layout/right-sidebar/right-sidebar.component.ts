@@ -1,20 +1,10 @@
-import { DOCUMENT, NgClass } from '@angular/common';
-import {
-  Component,
-  Inject,
-  ElementRef,
-  OnInit,
-  AfterViewInit,
-  Renderer2,
-  ChangeDetectionStrategy,
-} from '@angular/core';
-import { MatSlideToggleChange, MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { ConfigService } from '@config';
-import { DirectionService, InConfiguration, RightSidebarService } from '@core';
-import { UnsubscribeOnDestroyAdapter } from '@shared';
-import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { NgScrollbar } from 'ngx-scrollbar';
-import { FeatherIconsComponent } from '@shared/components/feather-icons/feather-icons.component';
+import {DOCUMENT} from '@angular/common';
+import {AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, Inject, OnInit, Renderer2,} from '@angular/core';
+import {MatSlideToggleChange, MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {ConfigService} from '@config';
+import {DirectionService, InConfiguration, RightSidebarService} from '@core';
+import {UnsubscribeOnDestroyAdapter} from '@shared';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -23,9 +13,6 @@ import { FeatherIconsComponent } from '@shared/components/feather-icons/feather-
   styleUrls: ['./right-sidebar.component.scss'],
   standalone: true,
   imports: [
-    NgClass,
-    FeatherIconsComponent,
-    NgScrollbar,
     MatButtonToggleModule,
     MatSlideToggleModule,
   ],
@@ -55,6 +42,7 @@ export class RightSidebarComponent
   ) {
     super();
   }
+
   ngOnInit() {
     this.config = this.configService.configData;
     this.subs.sink = this.rightSidebarService.sidebarState.subscribe(
@@ -103,6 +91,7 @@ export class RightSidebarComponent
     localStorage.setItem('choose_skin', 'theme-' + this.selectedBgColor);
     localStorage.setItem('choose_skin_active', this.selectedBgColor);
   }
+
   lightSidebarBtnClick() {
     this.renderer.removeClass(this.document.body, 'menu_dark');
     this.renderer.removeClass(this.document.body, 'logo-black');
@@ -112,6 +101,7 @@ export class RightSidebarComponent
     localStorage.setItem('choose_logoheader', 'logo-white');
     localStorage.setItem('menuOption', menuOption);
   }
+
   darkSidebarBtnClick() {
     this.renderer.removeClass(this.document.body, 'menu_light');
     this.renderer.removeClass(this.document.body, 'logo-white');
@@ -121,6 +111,7 @@ export class RightSidebarComponent
     localStorage.setItem('choose_logoheader', 'logo-black');
     localStorage.setItem('menuOption', menuOption);
   }
+
   lightThemeBtnClick() {
     this.renderer.removeClass(this.document.body, 'dark');
     this.renderer.removeClass(this.document.body, 'submenu-closed');
@@ -152,6 +143,7 @@ export class RightSidebarComponent
     localStorage.setItem('theme', theme);
     localStorage.setItem('menuOption', menuOption);
   }
+
   darkThemeBtnClick() {
     this.renderer.removeClass(this.document.body, 'light');
     this.renderer.removeClass(this.document.body, 'submenu-closed');
@@ -182,25 +174,29 @@ export class RightSidebarComponent
     localStorage.setItem('theme', theme);
     localStorage.setItem('menuOption', menuOption);
   }
+
   setRightSidebarWindowHeight() {
     this.innerHeight = window.innerHeight;
     const height = this.innerHeight - this.headerHeight;
     this.maxHeight = height + '';
     this.maxWidth = '500px';
   }
+
   onClickedOutside(event: Event) {
     const button = event.target as HTMLButtonElement;
     if (button.id !== 'settingBtn') {
-      if (this.isOpenSidebar === true) {
+      if (this.isOpenSidebar) {
         this.toggleRightSidebar();
       }
     }
   }
+
   toggleRightSidebar(): void {
     this.rightSidebarService.setRightSidebar(
       (this.isOpenSidebar = !this.isOpenSidebar)
     );
   }
+
   switchDirection(event: MatSlideToggleChange) {
     const isrtl = String(event.checked);
     if (
@@ -221,12 +217,14 @@ export class RightSidebarComponent
     localStorage.setItem('isRtl', isrtl);
     this.isRtl = event.checked;
   }
+
   setRTLSettings() {
     document.getElementsByTagName('html')[0].setAttribute('dir', 'rtl');
     this.renderer.addClass(this.document.body, 'rtl');
     this.isRtl = true;
     localStorage.setItem('isRtl', 'true');
   }
+
   setLTRSettings() {
     document.getElementsByTagName('html')[0].removeAttribute('dir');
     this.renderer.removeClass(this.document.body, 'rtl');

@@ -1,13 +1,13 @@
-import { Direction, BidiModule } from '@angular/cdk/bidi';
-import { AfterViewInit, Component, Inject, Renderer2 } from '@angular/core';
-import { DirectionService, InConfiguration, RightSidebarService } from '@core';
-import { ConfigService } from '@config';
-import { DOCUMENT } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
-import { RightSidebarComponent } from '../../right-sidebar/right-sidebar.component';
-import { SidebarComponent } from '../../sidebar/sidebar.component';
-import { HeaderComponent } from '../../header/header.component';
-import { UnsubscribeOnDestroyAdapter } from '@shared';
+import {BidiModule, Direction} from '@angular/cdk/bidi';
+import {AfterViewInit, Component, Inject, Renderer2} from '@angular/core';
+import {DirectionService, InConfiguration, RightSidebarService} from '@core';
+import {ConfigService} from '@config';
+import {DOCUMENT} from '@angular/common';
+import {RouterOutlet} from '@angular/router';
+import {RightSidebarComponent} from '../../right-sidebar/right-sidebar.component';
+import {SidebarComponent} from '../../sidebar/sidebar.component';
+import {HeaderComponent} from '../../header/header.component';
+import {UnsubscribeOnDestroyAdapter} from '@shared';
 
 @Component({
   selector: 'app-main-layout',
@@ -26,6 +26,7 @@ import { UnsubscribeOnDestroyAdapter } from '@shared';
 export class MainLayoutComponent extends UnsubscribeOnDestroyAdapter implements AfterViewInit {
   direction!: Direction;
   public config!: InConfiguration;
+
   constructor(
     private directoryService: DirectionService,
     private configService: ConfigService,
@@ -46,7 +47,7 @@ export class MainLayoutComponent extends UnsubscribeOnDestroyAdapter implements 
           }
         } else {
           if (this.config) {
-            if (this.config.layout.rtl === true) {
+            if (this.config.layout.rtl) {
               this.direction = 'rtl';
               localStorage.setItem('isRtl', 'true');
             } else {
@@ -58,6 +59,7 @@ export class MainLayoutComponent extends UnsubscribeOnDestroyAdapter implements 
       }
     });
   }
+
   ngAfterViewInit(): void {
     //------------ set varient start----------------
     if (localStorage.getItem('theme')) {
@@ -116,7 +118,7 @@ export class MainLayoutComponent extends UnsubscribeOnDestroyAdapter implements 
         this.setLTRSettings();
       }
     } else {
-      if (this.config.layout.rtl == true) {
+      if (this.config.layout.rtl) {
         this.setRTLSettings();
       } else {
         this.setLTRSettings();
@@ -167,7 +169,7 @@ export class MainLayoutComponent extends UnsubscribeOnDestroyAdapter implements 
         this.renderer.addClass(this.document.body, 'submenu-closed');
       }
     } else {
-      if (this.config.layout.sidebar.collapsed == true) {
+      if (this.config.layout.sidebar.collapsed) {
         this.renderer.addClass(this.document.body, 'side-closed');
         this.renderer.addClass(this.document.body, 'submenu-closed');
         localStorage.setItem('collapsed_menu', 'true');
@@ -187,6 +189,7 @@ export class MainLayoutComponent extends UnsubscribeOnDestroyAdapter implements 
 
     localStorage.setItem('isRtl', 'true');
   }
+
   setLTRSettings() {
     document.getElementsByTagName('html')[0].removeAttribute('dir');
     this.renderer.removeClass(this.document.body, 'rtl');

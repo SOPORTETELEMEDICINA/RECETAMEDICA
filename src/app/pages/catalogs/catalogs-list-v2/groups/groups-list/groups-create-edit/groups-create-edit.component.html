@@ -1,0 +1,67 @@
+<div class="addContainer">
+  <div class="modalHeader">
+    <div class="editRowModal">
+      <div class="modalHeader clearfix">
+        <div class="modal-about">
+          {{ dialogTitle }}
+        </div>
+      </div>
+    </div>
+    <button (click)="dialogRef.close()" aria-label="Close dialog" class="modal-close-button" mat-icon-button>
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div mat-dialog-content>
+    <form (ngSubmit)="submit()" [formGroup]="groupsForm" class="register-form m-4">
+
+      <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <mat-form-field appearance="outline" class="example-full-width">
+            <mat-label>Nombre</mat-label>
+            <input
+              aria-autocomplete="none"
+              autocomplete="nope"
+              formControlName="nombre" matInput required>
+            <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>business_group</mat-icon>
+            @if (groupsForm.get('nombre')?.hasError('required')) {
+              <mat-error>{{ getErrorMessage() }}</mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+          <div class="card">
+            <div class="header">
+              <h2>Logo</h2>
+            </div>
+            <div class="body">
+              <div class="example-container">
+                <form [formGroup]="groupsForm">
+                  <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-5">
+                      <label>{{ action === 'edit' ? 'Reemplazar' : 'Subir' }}</label>
+                      <app-file-upload [acceptedTypes]="'image/*'" formControlName="logoBase64"></app-file-upload>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div class="example-button-row">
+            <button (click)="confirmAdd()" [disabled]="!groupsForm.valid" [mat-dialog-close]="1" color="primary"
+                    mat-flat-button>Guardar
+            </button>
+            <button (click)="onNoClick()" color="warn" mat-flat-button tabindex="-1">Cancelar</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

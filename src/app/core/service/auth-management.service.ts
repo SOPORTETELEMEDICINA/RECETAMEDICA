@@ -1,13 +1,14 @@
-import { Injectable } from '@angular/core';
-import { JwtHelperService } from '@auth0/angular-jwt';
-import { environment } from '@enviroment/environment';
-import { UserRole } from '@core/models/Enums/UserRole';
+import {Injectable} from '@angular/core';
+import {JwtHelperService} from '@auth0/angular-jwt';
+import {environment} from '@enviroment/environment';
+import {UserRole} from '@core/models/Enums/UserRole';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthManagementService {
-  constructor(public jwtHelper: JwtHelperService) {}
+  constructor(public jwtHelper: JwtHelperService) {
+  }
 
   saveUserToken(token: string): void {
     localStorage.setItem(environment.token_name, token);

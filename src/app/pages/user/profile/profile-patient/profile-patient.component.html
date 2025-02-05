@@ -1,0 +1,300 @@
+<!--suppress AngularNgOptimizedImage -->
+<div class="row clearfix">
+  <div class="col-lg-4 col-md-12">
+    <div class="card">
+      <div class="m-b-20">
+        <div class="contact-grid">
+          <div class="profile-header bg-dark">
+            <div class="user-name">{{ user.nombres }} {{ user.primerApellido }} {{ user.segundoApellido }}</div>
+            <div class="name-center">{{ user.tipoUsuario }}</div>
+          </div>
+          <img alt="" class="user-img" src="{{userImg}}">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-8 col-md-12">
+    <div class="card">
+      <mat-tab-group>
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon class="example-tab-icon msr-2">face</mat-icon>
+            Información usuario: {{ user.usr }}
+          </ng-template>
+          <div class="col-lg-12 col-md-12 col-sm-12">
+            <div class="project_widget">
+              <div class="header">
+                <h2><strong>General</strong></h2>
+              </div>
+              <div class="body">
+                <div class="row">
+                  <div class="col-md-6 col-6 b-r">
+                    <strong>Nombre Completo</strong>
+                    <br>
+                    <p
+                      class="text-muted">{{ user.nombres }} {{ user.primerApellido }} {{ user.segundoApellido }}</p>
+                  </div>
+                  <div class="col-md-6 col-6 b-r">
+                    <strong>Tipo Usuario</strong>
+                    <br>
+                    <p
+                      class="text-muted">{{ user.tipoUsuario }}</p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6 col-6 b-r">
+                    <strong>Correo</strong>
+                    <br>
+                    <p class="text-muted">{{ user.email }}</p>
+                  </div>
+                  <div class="col-md-6 col-6 b-r">
+                    <strong>Teléfono</strong>
+                    <br>
+                    <p class="text-muted">{{ user.movil | formatMobile }}</p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6 col-6 b-r">
+                    <strong>Domicilio</strong>
+                    <br>
+                    <p class="text-muted">{{ user.domicilio }}</p>
+                  </div>
+                  <div class="col-md-6 col-6 b-r">
+                    <strong>Código Postal</strong>
+                    <br>
+                    <p class="text-muted">{{ user.codigoPostal }}</p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6 col-6 b-r">
+                    <strong>Municipio</strong>
+                    <br>
+                    <p class="text-muted">{{ user.municipio }}</p>
+                  </div>
+                  <div class="col-md-6 col-6 b-r">
+                    <strong>Asentamiento</strong>
+                    <br>
+                    <p class="text-muted">{{ user.nombreAsentamiento }}</p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6 col-6 b-r">
+                    <strong>Grupo Empresarial</strong>
+                    <br>
+                    <p class="text-muted">{{ grupoEmpresarial }}</p>
+                  </div>
+                  <div class="col-md-6 col-6 b-r">
+                    <strong>Sucursal</strong>
+                    <br>
+                    <p class="text-muted">{{ user.nombreSucursal }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-tab>
+
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon class="example-tab-icon msr-2">settings</mat-icon>
+            Configuración
+          </ng-template>
+          <form [formGroup]="userForm" class="register-form m-4">
+
+            <div class="row">
+              <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                <mat-form-field appearance="outline" class="example-full-width">
+                  <mat-label>Usuario</mat-label>
+                  <input
+                    aria-autocomplete="none"
+                    autocomplete="nope"
+                    formControlName="usr"
+                    matInput
+                    required
+                  />
+                  @if (userForm.get('usr')?.hasError('required')) {
+                    <mat-error>{{ getErrorMessage() }}</mat-error>
+                  }
+                </mat-form-field>
+              </div>
+
+              <div class="col-xl-6 col-lg- col-md-6 col-sm-12 mb-2">
+                <mat-form-field appearance="outline" class="example-full-width">
+                  <mat-label>Correo electronico</mat-label>
+                  <input
+                    aria-autocomplete="none"
+                    autocomplete="nope"
+                    email
+                    formControlName="email"
+                    matInput
+                    required
+                  />
+                  @if (userForm.get('email')?.hasError('email')) {
+                    <mat-error>{{ getErrorMessage() }}</mat-error>
+                  }
+                  @if (userForm.get('email')?.hasError('required')) {
+                    <mat-error>{{ getErrorMessage() }}</mat-error>
+                  }
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                <button
+                  (click)="toggleCambiarContrasena()"
+                  [color]="cambiarContrasena ? 'warn' : 'primary'"
+                  mat-flat-button>
+                  {{ cambiarContrasena ? 'No cambiar contraseña' : 'Cambiar contraseña' }}
+                </button>
+              </div>
+              @if (cambiarContrasena) {
+                <div class="col-xl-6 col-lg- col-md-6 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Nueva Contraseña</mat-label>
+                    <input
+                      autocomplete="nope"
+                      aria-autocomplete="none"
+                      type="password"
+                      formControlName="password"
+                      matInput
+                    />
+                    @if (userForm.get('password')?.hasError('required')) {
+                      <mat-error>{{ getErrorMessage() }}</mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+              }
+            </div>
+
+            <mat-divider/>
+
+            <div class="row m-t-20">
+              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                <mat-form-field appearance="outline" class="example-full-width">
+                  <mat-label>Nombre (s)</mat-label>
+                  <input
+                    aria-autocomplete="none"
+                    autocomplete="nope"
+                    formControlName="nombres"
+                    matInput
+                    required
+                  />
+                  @if (userForm.get('nombres')?.hasError('required')) {
+                    <mat-error>{{ getErrorMessage() }}</mat-error>
+                  }
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                <mat-form-field appearance="outline" class="example-full-width">
+                  <mat-label>Apellido paterno</mat-label>
+                  <input
+                    aria-autocomplete="none"
+                    autocomplete="nope"
+                    formControlName="primerApellido"
+                    matInput
+                    required
+                  />
+                  @if (userForm.get('primerApellido')?.hasError('required')) {
+                    <mat-error>{{ getErrorMessage() }}</mat-error>
+                  }
+                </mat-form-field>
+              </div>
+
+              <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                <mat-form-field appearance="outline" class="example-full-width">
+                  <mat-label>Apellido materno</mat-label>
+                  <input
+                    aria-autocomplete="none"
+                    autocomplete="nope"
+                    formControlName="segundoApellido"
+                    matInput
+                    required=""
+                  />
+                  @if (userForm.get('segundoApellido')?.hasError('required')) {
+                    <mat-error>{{ getErrorMessage() }}</mat-error>
+                  }
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                <mat-form-field appearance="outline" class="example-full-width">
+                  <mat-label>Télefono móvil</mat-label>
+                  <input
+                    aria-autocomplete="none"
+                    autocomplete="nope"
+                    formControlName="movil"
+                    matInput
+                    required
+                  />
+                  @if (userForm.get('movil')?.hasError('required')) {
+                    <mat-error>{{ getErrorMessage() }}</mat-error>
+                  }
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                <mat-form-field appearance="outline" class="example-full-width">
+                  <mat-label>Dirección</mat-label>
+                  <textarea
+                    aria-autocomplete="none"
+                    autocomplete="nope"
+                    formControlName="domicilio"
+                    matInput
+                    required
+                  ></textarea>
+                  @if (userForm.get('domicilio')?.hasError('required')) {
+                    <mat-error>{{ getErrorMessage() }}</mat-error>
+                  }
+                </mat-form-field>
+              </div>
+            </div>
+
+            <mat-divider/>
+
+
+            <!--            <div class="row m-t-20">-->
+            <!--              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">-->
+            <!--                <mat-form-field appearance="outline" class="example-full-width">-->
+            <!--                  <mat-label>Grupo empresarial</mat-label>-->
+            <!--                  <mat-select-->
+            <!--                    formControlName="idGEMP"-->
+            <!--                    required-->
+            <!--                  >-->
+            <!--                    <mat-option-->
+            <!--                      *ngFor="let row of businessGroups"-->
+            <!--                      value="{{ row.idGEMP }}"-->
+            <!--                    >{{ row.nombre }}-->
+            <!--                    </mat-option-->
+            <!--                    >-->
+            <!--                  </mat-select>-->
+            <!--                  @if (userForm.get('idGEMP')?.hasError('required')) {-->
+            <!--                    <mat-error>{{ getErrorMessage() }}</mat-error>-->
+            <!--                  }-->
+            <!--                </mat-form-field>-->
+            <!--              </div>-->
+            <!--            </div>-->
+
+            <button (click)="confirmAdd()"
+                    [disabled]="!userForm.valid || !userForm.valid"
+                    [ngClass]="{
+          'button-custom': true,
+          'disabled': !userForm.valid || !userForm.valid
+        }"
+                    color="primary"
+                    mat-button>
+              {{ !userForm.valid || !userForm.valid ? 'Formulario Incompleto' : 'Editar usuario' }}
+            </button>
+          </form>
+        </mat-tab>
+
+      </mat-tab-group>
+    </div>
+  </div>
+</div>

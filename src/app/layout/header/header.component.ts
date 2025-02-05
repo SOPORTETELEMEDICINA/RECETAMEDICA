@@ -1,32 +1,22 @@
-import { MatToolbarModule } from '@angular/material/toolbar';
-import {
-  CommonModule,
-  DOCUMENT,
-  NgClass,
-  NgOptimizedImage,
-} from '@angular/common';
-import {
-  Component,
-  Inject,
-  ElementRef,
-  OnInit,
-  Renderer2,
-} from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
-import { ConfigService } from '@config';
-import { InConfiguration, LanguageService, RightSidebarService } from '@core';
-import { UnsubscribeOnDestroyAdapter } from '@shared';
-import { FeatherIconsComponent } from '@shared/components/feather-icons/feather-icons.component';
-import { NgScrollbar } from 'ngx-scrollbar';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { AuthManagementService } from '@core/service/auth-management.service';
-import { PatientDetails } from '@core/models/PatientDetails';
-import { BusinessGroup } from '@core/models/BusinessGroup';
-import { DefaultResponse } from '@core/models/Http/DefaultResponse';
-import { CatalogsService } from '@core/http/catalogs.service';
-import { BusinessGroupService } from '@core/service/business-group.service';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import {CommonModule, DOCUMENT, NgClass,} from '@angular/common';
+import {Component, Inject, OnInit, Renderer2,} from '@angular/core';
+import {RouterLink} from '@angular/router';
+import {ConfigService} from '@config';
+import {InConfiguration, LanguageService} from '@core';
+import {UnsubscribeOnDestroyAdapter} from '@shared';
+import {NgScrollbar} from 'ngx-scrollbar';
+import {MatMenuModule} from '@angular/material/menu';
+import {MatButtonModule} from '@angular/material/button';
+import {MatIconModule} from '@angular/material/icon';
+import {AuthManagementService} from '@core/service/auth-management.service';
+import {PatientDetails} from '@core/models/PatientDetails';
+import {BusinessGroup} from '@core/models/BusinessGroup';
+import {DefaultResponse} from '@core/models/Http/DefaultResponse';
+import {CatalogsService} from '@core/http/catalogs.service';
+import {BusinessGroupService} from '@core/service/business-group.service';
+import {Branch} from "@core/models/Branch";
+import {BranchGroupService} from "@core/service/branch-group.service";
 
 @Component({
   selector: 'app-header',
@@ -39,19 +29,17 @@ import { BusinessGroupService } from '@core/service/business-group.service';
     MatButtonModule,
     MatMenuModule,
     NgScrollbar,
-    FeatherIconsComponent,
     MatIconModule,
     MatToolbarModule,
-    NgOptimizedImage,
     CommonModule,
   ],
 })
 export class HeaderComponent
   extends UnsubscribeOnDestroyAdapter
-  implements OnInit
-{
+  implements OnInit {
   public config!: InConfiguration;
   userName?: string;
+  userImg?: string;
   homePage?: string;
   isNavbarCollapsed = true;
   flagvalue: string | string[] | undefined;
@@ -62,30 +50,30 @@ export class HeaderComponent
   docElement?: HTMLElement;
   isFullScreen = false;
   businessGroups: BusinessGroup[] = [];
+  branches: Branch[] = [];
   businessGroupId: string = '';
+  branchGroupId: string = '';
+  isAdmin: boolean = false;
+  isSupervisor: boolean = false;
+  listLang = [
+    {text: 'English', flag: 'assets/images/flags/us.svg', lang: 'en'},
+    {text: 'Spanish', flag: 'assets/images/flags/spain.svg', lang: 'es'},
+    {text: 'German', flag: 'assets/images/flags/germany.svg', lang: 'de'},
+  ];
+  data: PatientDetails[] = [];
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
     private renderer: Renderer2,
-    public elementRef: ElementRef,
-    private rightSidebarService: RightSidebarService,
     private configService: ConfigService,
-    private router: Router,
     public languageService: LanguageService,
     private authManagement: AuthManagementService,
     private catalogsService: CatalogsService,
-    private businessGroupService: BusinessGroupService
+    private businessGroupService: BusinessGroupService,
+    private branchGroupService: BranchGroupService,
   ) {
     super();
   }
-
-  listLang = [
-    { text: 'English', flag: 'assets/images/flags/us.svg', lang: 'en' },
-    { text: 'Spanish', flag: 'assets/images/flags/spain.svg', lang: 'es' },
-    { text: 'German', flag: 'assets/images/flags/germany.svg', lang: 'de' },
-  ];
-
-  data: PatientDetails[] = [];
 
   ngOnInit() {
     this.config = this.configService.configData;
@@ -113,9 +101,24 @@ export class HeaderComponent
         this.businessGroupId = storedBusinessGroupId;
       }
     }
-    this.userName = userData.unique_name;
+    if ((this.branchGroupId = '')) {
+      this.changeBranchGroupId(userData.IdSucursal);
+    } else {
+      const storedBranchGroupId = localStorage.getItem('branchGroupId');
+      if (storedBranchGroupId) {
+        this.branchGroupId = storedBranchGroupId;
+      }
+    }
 
+    this.userName = localStorage.getItem('userName') || '';
+    this.isAdmin = this.authManagement.isUserAdmin();
+    this.isSupervisor = this.authManagement.isUserPharmacySupervision();
+    this.userImg = 'assets/images/user/imgUSer.png';
     this.getBusinessGroups();
+
+    if (this.isSupervisor) {
+      this.getSucursalesIdGemp(this.businessGroupId);
+    }
   }
 
   callFullscreen() {
@@ -128,12 +131,14 @@ export class HeaderComponent
     }
     this.isFullScreen = !this.isFullScreen;
   }
+
   setLanguage(text: string, lang: string, flag: string) {
     this.countryName = text;
     this.flagvalue = flag;
     this.langStoreValue = lang;
     this.languageService.setLanguage(lang);
   }
+
   mobileMenuSidebarOpen(event: Event, className: string) {
     const hasClass = (event.target as HTMLInputElement).classList.contains(
       className
@@ -144,6 +149,7 @@ export class HeaderComponent
       this.renderer.addClass(this.document.body, className);
     }
   }
+
   callSidemenuCollapse() {
     const hasClass = this.document.body.classList.contains('side-closed');
     if (hasClass) {
@@ -156,6 +162,7 @@ export class HeaderComponent
       localStorage.setItem('collapsed_menu', 'true');
     }
   }
+
   getBusinessGroups(): void {
     this.catalogsService.getBusinessGroups().subscribe({
       next: (res: DefaultResponse<BusinessGroup[]>) => {
@@ -182,5 +189,28 @@ export class HeaderComponent
     if (storedBusinessGroupId) {
       this.businessGroupId = storedBusinessGroupId;
     }
+  }
+
+  changeBranchGroupId(id: string): void {
+    this.branchGroupService.setBranchGroupId(id);
+    const storedbranchGroupId = localStorage.getItem('branchGroupId');
+    if (storedbranchGroupId) {
+      this.branchGroupId = storedbranchGroupId;
+    }
+  }
+
+  getSucursalesIdGemp(idGemp: string) {
+    this.catalogsService.getBranchesByIdGEMP(idGemp).subscribe({
+      next: (res: DefaultResponse<Branch[]>) => {
+        this.branches = [...res.data];
+        this.branches.sort((a, b) => {
+          return a.nombre.localeCompare(b.nombre);
+        });
+
+        if (this.branchGroupId == '') {
+          this.branchGroupId = this.branches[0].idSucursal;
+        }
+      },
+    });
   }
 }

@@ -1,0 +1,132 @@
+<!--suppress AngularNgOptimizedImage -->
+<section class="content">
+  <div class="content-block">
+    <div class="block-header">
+      <app-breadcrumb [active_item]="'Perfil'" [title]="'Usuarios'"></app-breadcrumb>
+    </div>
+    <div class="row clearfix">
+      <div class="col-lg-4 col-md-12">
+        <div class="card">
+          <div class="m-b-20">
+            <div class="contact-grid">
+              <div class="profile-header bg-dark">
+                <div class="user-name">{{ user.nombres }} {{ user.primerApellido }} {{ user.segundoApellido }}</div>
+                <div class="name-center">{{ userRole }}</div>
+              </div>
+              <img alt="" class="user-img" src="{{userImg}}">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-8 col-md-12">
+        <div class="card">
+          <mat-tab-group>
+            <mat-tab>
+              <ng-template mat-tab-label>
+                <mat-icon class="example-tab-icon msr-2">face</mat-icon>
+                Información usuario: {{ user.usr }}
+              </ng-template>
+              <div class="col-lg-12 col-md-12 col-sm-12">
+                <div class="project_widget">
+                  <div class="header">
+                    <h2><strong>General</strong></h2>
+                  </div>
+                  <div class="body">
+                    <div class="row">
+                      <div class="col-md-6 col-6 b-r">
+                        <strong>Nombre Completo</strong>
+                        <br>
+                        <p
+                          class="text-muted">{{ user.nombres }} {{ user.primerApellido }} {{ user.segundoApellido }}</p>
+                      </div>
+                      <div class="col-md-6 col-6 b-r">
+                        <strong>Tipo Usuario</strong>
+                        <br>
+                        <p
+                          class="text-muted">{{ user.tipoUsuario }}</p>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6 col-6 b-r">
+                        <strong>Correo</strong>
+                        <br>
+                        <p class="text-muted">{{ user.email }}</p>
+                      </div>
+                      <div class="col-md-6 col-6 b-r">
+                        <strong>Teléfono</strong>
+                        <br>
+                        <p class="text-muted">{{ user.movil | formatMobile }}</p>
+                      </div>
+                    </div>
+                    <!--                    <div class="row">-->
+                    <!--                      <div class="col-md-6 col-6 b-r">-->
+                    <!--                        <strong>Fecha de Nacimiento</strong>-->
+                    <!--                        <br>-->
+                    <!--                        <p class="text-muted">{{ user.fechaNacimiento }}</p>-->
+                    <!--                      </div>-->
+                    <!--                      <div class="col-md-6 col-6 b-r">-->
+                    <!--                        <strong>Edad</strong>-->
+                    <!--                        <br>-->
+                    <!--                        <p class="text-muted">{{ user.edad }} Años</p>-->
+                    <!--                      </div>-->
+                    <!--                    </div>-->
+                    <div class="row">
+                      <div class="col-md-6 col-6 b-r">
+                        <strong>Domicilio</strong>
+                        <br>
+                        <p class="text-muted">{{ user.domicilio }}</p>
+                      </div>
+                      <div class="col-md-6 col-6 b-r">
+                        <strong>Código Postal</strong>
+                        <br>
+                        <p class="text-muted">{{ user.codigoPostal }}</p>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6 col-6 b-r">
+                        <strong>Tipo Asentamiento</strong>
+                        <br>
+                        <p class="text-muted">{{ user.tipoAsentamiento }}</p>
+                      </div>
+                      <div class="col-md-6 col-6 b-r">
+                        <strong>Asentamiento</strong>
+                        <br>
+                        <p class="text-muted">{{ user.nombreAsentamiento }}</p>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6 col-6 b-r">
+                        <strong>Municipio</strong>
+                        <br>
+                        <p class="text-muted">{{ user.municipio }}</p>
+                      </div>
+                      <div class="col-md-6 col-6 b-r">
+                        <strong>Ciudad</strong>
+                        <br>
+                        <p class="text-muted">{{ user.ciudad }}</p>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-md-6 col-6 b-r">
+                        <strong>Grupo Empresarial</strong>
+                        <br>
+                        <p class="text-muted">{{ grupoEmpresarial }}</p>
+                      </div>
+                      <div class="col-md-6 col-6 b-r">
+                        <strong>Sucursal</strong>
+                        <br>
+                        <p class="text-muted">{{ user.nombreSucursal }}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </mat-tab>
+
+          </mat-tab-group>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,7 +1,8 @@
-import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { Event, Router, NavigationStart, NavigationEnd, RouterModule } from '@angular/router';
-import { PageLoaderComponent } from './layout/page-loader/page-loader.component';
+import {CommonModule} from '@angular/common';
+import {Component} from '@angular/core';
+import {Event, NavigationEnd, NavigationStart, Router, RouterModule} from '@angular/router';
+import {PageLoaderComponent} from './layout/page-loader/page-loader.component';
+
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -16,6 +17,7 @@ import { PageLoaderComponent } from './layout/page-loader/page-loader.component'
 })
 export class AppComponent {
   currentUrl!: string;
+
   constructor(public _router: Router) {
     this._router.events.subscribe((routerEvent: Event) => {
       if (routerEvent instanceof NavigationStart) {

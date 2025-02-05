@@ -1,0 +1,87 @@
+<div class="row">
+  @if (statistics.userRole == UserRole.Medico) {
+    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+      <div class="card card-statistic-2">
+        <div class="clearfix">
+          <div style="display: flex">
+            <div class="card-icon shadow-primary bg-purple">
+              <i class="material-icons align-middle">face</i>
+            </div>
+            <div class="card-name text-purple">
+              <span><br>Total de <br> <span class="text-22">Pacientes</span></span>
+            </div>
+            <div class="card-number">
+              <h6 class="mb-0">{{ statistics.patients }}</h6>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  } @else {
+    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+      <div class="card card-statistic-2">
+        <div class="clearfix">
+          <div style="display: flex">
+            <div class="card-icon shadow-primary bg-purple">
+              <i class="material-icons align-middle">face</i>
+            </div>
+            <div class="card-name text-purple">
+              <span><br>Total de <br> <span class="text-22">Empleados</span></span>
+            </div>
+            <div class="card-number">
+              <h6 class="mb-0"> {{ statistics.employees }} </h6>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+  <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+    <div class="card card-statistic-2">
+      <div class="clearfix">
+        <div style="display: flex">
+          <div class="card-icon shadow-primary bg-orange">
+            <i class="fas fa-prescription"></i>
+          </div>
+          <div class="card-name text-orange">
+            <span><br>Total de <br> <span class="text-22">Recetas</span></span>
+          </div>
+          <div class="card-number">
+            <h6 class="mb-0">{{ statistics.prescriptions }}</h6>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+    <div class="card card-statistic-2">
+      <div class="clearfix">
+        <div
+          (click)="onCreatePatient()"
+          class="card-icon shadow-primary bg-cyan pointer"
+        >
+          <i class="material-icons align-middle">person_add</i>
+        </div>
+        <span style="color: deepskyblue;"><br>Crear <br> <span style="color: deepskyblue; font-size: 22px">Nuevo Paciente</span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+    <div class="card card-statistic-2">
+      <div class="clearfix">
+        <div
+          (click)="onCreatePrescription()"
+          class="card-icon shadow-primary bg-blue pointer"
+        >
+          <i class="fas fa-file-prescription"></i>
+        </div>
+        <span style="color: #1f91f3;"><br>Crear <br> <span
+          style="color: #1f91f3; font-size: 22px">Nueva Receta</span></span>
+      </div>
+    </div>
+  </div>
+
+</div>

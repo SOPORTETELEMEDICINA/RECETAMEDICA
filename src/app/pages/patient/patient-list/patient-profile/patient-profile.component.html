@@ -1,0 +1,164 @@
+<!--suppress AngularNgOptimizedImage -->
+<section class="content">
+  <div class="content-block">
+    <div class="block-header">
+      <app-breadcrumb [active_item]="'Perfil'" [title]="'Paciente'"></app-breadcrumb>
+    </div>
+    <div class="row clearfix">
+      <div class="col-lg-4 col-md-12">
+        <div class="card">
+          <div class="m-b-20">
+            <div class="contact-grid">
+              <div class="profile-header bg-dark">
+                <div class="user-name">{{ patient.nombres }}</div>
+                <div class="name-center">{{ userRole }}</div>
+              </div>
+              <img alt="" class="user-img" src="{{userImg}}">
+              <div [hidden]="patient.patologias.length < 1" class="col-lg-12 col-xl-12 col-md-12 col-sm-12 m-t-20">
+                <mat-list>
+                  <h5>Patologías</h5>
+                  <mat-list-item *ngFor="let row of patient.patologias">{{
+                      row.name
+                    }}
+                  </mat-list-item>
+                </mat-list>
+              </div>
+              <div [hidden]="patient.alergias.length < 1" class="col-lg-12 col-xl-12 col-md-12 col-sm-12 m-t-20">
+                <mat-list>
+                  <h5>Alergias</h5>
+                  <mat-list-item *ngFor="let row of patient.alergias">{{
+                      row.name
+                    }}
+                  </mat-list-item>
+                </mat-list>
+              </div>
+              <div [hidden]="patient.molecules.length < 1" class="col-lg-12 col-xl-12 col-md-12 col-sm-12 m-t-20">
+                <mat-list>
+                  <h5>Moleculas</h5>
+                  <mat-list-item *ngFor="let row of patient.molecules">{{
+                      row.name
+                    }}
+                  </mat-list-item>
+                </mat-list>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-8 col-md-12">
+        <div class="card">
+          <mat-tab-group>
+            <mat-tab>
+              <ng-template mat-tab-label>
+                <mat-icon class="example-tab-icon msr-2">face</mat-icon>
+                Información usuario: {{ patient.usr }}
+              </ng-template>
+              <div class="col-lg-12 col-md-12 col-sm-12">
+                <div class="project_widget">
+                  <div class="header">
+                    <h2><strong>General</strong></h2>
+                  </div>
+                  <div class="body">
+                    <div class="row">
+                      <div class="col-md-6 col-6 b-r">
+                        <strong>Nombre Completo</strong>
+                        <br>
+                        <p
+                          class="text-muted">{{ patient.nombres }} {{ patient.primerApellido }} {{ patient.segundoApellido }}</p>
+                      </div>
+                      <div class="col-md-6 col-6 b-r">
+                        <strong>Genero</strong>
+                        <br>
+                        <p class="text-muted">{{ patient.genero == 'F' ? 'Fenmenino' : 'Masculino' }}</p>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6 col-6 b-r">
+                        <strong>Correo</strong>
+                        <br>
+                        <p class="text-muted">{{ patient.email }}</p>
+                      </div>
+                      <div class="col-md-6 col-6 b-r">
+                        <strong>Teléfono</strong>
+                        <br>
+                        <p class="text-muted">{{ patient.movil | formatMobile }}</p>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6 col-6 b-r">
+                        <strong>Fecha de Nacimiento</strong>
+                        <br>
+                        <p class="text-muted">{{ patient.fechaNacimiento }}</p>
+                      </div>
+                      <div class="col-md-6 col-6 b-r">
+                        <strong>Edad</strong>
+                        <br>
+                        <p class="text-muted">{{ patient.edad }} Años</p>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6 col-6 b-r">
+                        <strong>Domicilio</strong>
+                        <br>
+                        <p class="text-muted">{{ patient.domicilio }}</p>
+                      </div>
+                      <div class="col-md-6 col-6 b-r">
+                        <strong>Código Postal</strong>
+                        <br>
+                        <p class="text-muted">{{ patient.codigoPostal }}</p>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6 col-6 b-r">
+                        <strong>Tipo Asentamiento</strong>
+                        <br>
+                        <p class="text-muted">{{ patient.tipoAsentamiento }}</p>
+                      </div>
+                      <div class="col-md-6 col-6 b-r">
+                        <strong>Asentamiento</strong>
+                        <br>
+                        <p class="text-muted">{{ patient.asentamiento }}</p>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6 col-6 b-r">
+                        <strong>Municipio</strong>
+                        <br>
+                        <p class="text-muted">{{ patient.municipio }}</p>
+                      </div>
+                      <div class="col-md-6 col-6 b-r">
+                        <strong>Ciudad</strong>
+                        <br>
+                        <p class="text-muted">{{ patient.ciudad }}</p>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6 col-6 b-r">
+                        <strong>Entidad de Nacimiento</strong>
+                        <br>
+                        <p class="text-muted">{{ patient.entidadNacimiento }}</p>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6 col-6 b-r">
+                        <strong>Grupo Empresarial</strong>
+                        <br>
+                        <p class="text-muted">{{ patient.grupoEmpresarial }}</p>
+                      </div>
+                      <div class="col-md-6 col-6 b-r">
+                        <strong>Sucursal</strong>
+                        <br>
+                        <p class="text-muted">{{ patient.sucursal }}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </mat-tab>
+
+          </mat-tab-group>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

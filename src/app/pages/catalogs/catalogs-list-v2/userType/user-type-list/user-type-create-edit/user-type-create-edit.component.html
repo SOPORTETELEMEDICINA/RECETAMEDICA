@@ -1,0 +1,45 @@
+<div class="addContainer">
+  <div class="modalHeader">
+    <div class="editRowModal">
+      <div class="modalHeader clearfix">
+        <div class="modal-about">
+          {{ dialogTitle }}
+        </div>
+      </div>
+    </div>
+    <button (click)="dialogRef.close()" aria-label="Close dialog" class="modal-close-button" mat-icon-button>
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div mat-dialog-content>
+    <form (ngSubmit)="submit()" [formGroup]="userTypeForm" class="register-form m-4">
+
+      <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <mat-form-field appearance="outline" class="example-full-width">
+            <mat-label>Nombre</mat-label>
+            <input
+              aria-autocomplete="none"
+              autocomplete="nope"
+              formControlName="nombre" matInput required>
+            <mat-icon class="material-icons-outlined color-icon p-3" matSuffix>supervised_user_circle</mat-icon>
+            @if (userTypeForm.get('nombre')?.hasError('required')) {
+              <mat-error>{{ getErrorMessage() }}</mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <div class="example-button-row">
+            <button (click)="confirmAdd()" [disabled]="!userTypeForm.valid" [mat-dialog-close]="1" color="primary"
+                    mat-flat-button>Guardar
+            </button>
+            <button (click)="onNoClick()" color="warn" mat-flat-button tabindex="-1">Cancelar</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

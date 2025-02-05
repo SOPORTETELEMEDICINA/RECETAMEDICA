@@ -1,15 +1,16 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { environment } from '@enviroment/environment';
-import { AuthLoginRequest } from '@core/models/Http/Request/AuthLoginRequest';
-import { DefaultResponse } from '@core/models/Http/DefaultResponse';
-import { AuthLoginResponse } from '@core/models/Http/Response/AuthLoginResponse';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {environment} from '@enviroment/environment';
+import {AuthLoginRequest} from '@core/models/Http/Request/AuthLoginRequest';
+import {DefaultResponse} from '@core/models/Http/DefaultResponse';
+import {AuthLoginResponse} from '@core/models/Http/Response/AuthLoginResponse';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
   login(data: AuthLoginRequest) {
     return this.http.post<DefaultResponse<AuthLoginResponse>>(

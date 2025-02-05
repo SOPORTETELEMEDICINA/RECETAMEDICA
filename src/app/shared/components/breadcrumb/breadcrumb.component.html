@@ -7,11 +7,11 @@
       <li class="breadcrumb-item bcrumb-1">
         <a [routerLink]="'/dashboard'">
           <!-- <i class="fas fa-home"></i>   -->
-          <i-feather name="home" class="breadcrumb-icon"></i-feather>
+          <i-feather class="breadcrumb-icon" name="home"></i-feather>
         </a>
       </li>
       @for (item of items; track item) {
-      <li class="breadcrumb-item">{{ item }}</li>
+        <li class="breadcrumb-item">{{ item }}</li>
       }
       <li class="breadcrumb-item active">{{ active_item }}</li>
     </ul>

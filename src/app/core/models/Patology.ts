@@ -1,7 +1,6 @@
 export class Patology {
-  id!: string;
-  vidalId!: string;
-  name!: string;
-  title!: string;
-  updated!: string;
+  code!: string;
+  idCIM10!: number;
+  nameCIM10!: string;
+  name?: string;
 }

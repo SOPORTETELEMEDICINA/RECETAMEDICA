@@ -1,0 +1,31 @@
+export class DoctorDetails {
+  idMedico!: string;
+  idUsuario!: string;
+  cedulaGeneral!: string;
+  universidad!: string;
+  especialidad!: string;
+  cedulaEspecialidad!: string;
+  horario!: string;
+  nombres!: string;
+  primerApellido!: string;
+  segundoApellido!: string;
+  movil!: string;
+  email!: string;
+  domicilio!: string;
+  idAsentamiento!: number;
+  asentamiento!: string;
+  idTipoAsentamiento!: number;
+  tipoAsentamiento!: string;
+  idCP!: number;
+  codigoPostal!: string;
+  idMunicipio!: number;
+  noMunicipio!: number;
+  municipio!: string;
+  idCiudad!: number;
+  ciudad!: string;
+  idEntidad!: number;
+  estado!: string;
+  abreviatura!: string;
+  firma!: string;
+  imagen!: string;
+}

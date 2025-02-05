@@ -1,5 +1,5 @@
 import * as XLSX from 'xlsx';
-import { TableElement } from './TableElement';
+import {TableElement} from './TableElement';
 
 const getFileName = (name: string) => {
   const timeSpan = new Date().toISOString();
@@ -10,9 +10,10 @@ const getFileName = (name: string) => {
     fileName,
   };
 };
+
 export class TableExportUtil {
   static exportToExcel(arr: Partial<TableElement>[], name: string) {
-    const { sheetName, fileName } = getFileName(name);
+    const {sheetName, fileName} = getFileName(name);
 
     const wb = XLSX.utils.book_new();
     const ws = XLSX.utils.json_to_sheet(arr);

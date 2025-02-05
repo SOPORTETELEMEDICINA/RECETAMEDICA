@@ -1,0 +1,12 @@
+<div class="container">
+  <h3 mat-dialog-title>Eliminar {{ data.toDelete }}?</h3>
+  <div mat-dialog-content>
+    <p>¿Estás seguro de que deseas eliminar a {{ data.name }}?</p>
+  </div>
+  <div class="mb-1" mat-dialog-actions>
+    <button (click)="confirmDelete()" [mat-dialog-close]="1" color="warn" mat-flat-button>
+      Borrar
+    </button>
+    <button (click)="onNoClick()" mat-flat-button tabindex="-1">Cancelar</button>
+  </div>
+</div>

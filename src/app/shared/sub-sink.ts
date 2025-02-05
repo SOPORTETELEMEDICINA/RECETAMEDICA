@@ -1,4 +1,4 @@
-import { SubscriptionLike } from 'rxjs';
+import {SubscriptionLike} from 'rxjs';
 
 /**
  * Subscription sink that holds Observable subscriptions
@@ -29,21 +29,21 @@ export class SubSink {
   }
 
   /**
-   * Add subscriptions to the tracked subscriptions
-   * @example
-   *  this.subs.add(observable$.subscribe(...));
-   */
-  add(...subscriptions: SubscriptionLike[]) {
-    this._subs = this._subs.concat(subscriptions);
-  }
-
-  /**
    * Assign subscription to this sink to add it to the tracked subscriptions
    * @example
    *  this.subs.sink = observable$.subscribe(...);
    */
   set sink(subscription: SubscriptionLike) {
     this._subs.push(subscription);
+  }
+
+  /**
+   * Add subscriptions to the tracked subscriptions
+   * @example
+   *  this.subs.add(observable$.subscribe(...));
+   */
+  add(...subscriptions: SubscriptionLike[]) {
+    this._subs = this._subs.concat(subscriptions);
   }
 
   /**

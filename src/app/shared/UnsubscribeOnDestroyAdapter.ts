@@ -1,5 +1,5 @@
-import { Injectable, OnDestroy } from '@angular/core';
-import { SubSink } from './sub-sink';
+import {Injectable, OnDestroy} from '@angular/core';
+import {SubSink} from './sub-sink';
 
 /**
  * A class that automatically unsubscribes all observables when the object gets destroyed

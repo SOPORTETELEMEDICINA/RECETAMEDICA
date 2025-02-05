@@ -1,283 +1,579 @@
-<section class="content">
-  <div class="content-block">
-    <div class="block-header">
-      <!-- breadcrumb -->
-      <app-breadcrumb
-        [title]="'Receta'"
-        [items]="[]"
-        [active_item]="'Receta'"
-      ></app-breadcrumb>
-    </div>
-    <!-- Widgets -->
-    <div class="row" style="height: 10px">
-      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-        <div class="card" style="background-color: #00a5b8"></div>
+@if (!dataLoaded) {
+
+  <section class="content">
+    <div class="content-block">
+      <div class="block-header">
+        <app-breadcrumb
+          [active_item]="'Crear'"
+          [items]="[]"
+          [title]="'Receta'"
+        ></app-breadcrumb>
       </div>
-    </div>
-    <div class="row">
-      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-        <div class="card">
-          <div class="header">
-            <h2>Perfil del paciente</h2>
-          </div>
-          <div class="card-body">
-            <div class="row">
-              <div class="col-lg-3 col-xl-3 col-md-6 col-sm-6">
-<!--                <mat-form-field class="example-full-width" appearance="outline">-->
-<!--                  <mat-label>Selecciona el sexo del paciente</mat-label>-->
-<!--                  <mat-select name="gemp" matInput> </mat-select>-->
-<!--                </mat-form-field>-->
-                <mat-form-field class="example-full-width">
-                  <mat-label>Sexo del paciente</mat-label>
-                  <select matNativeControl required>
-                    <option value="f">Femenino</option>
-                    <option value="m">Masculino</option>
-                  </select>
-                </mat-form-field>
+      <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+          <div class="card">
+            <div class="body overflow-auto">
+              <div class="header">
+                <h2><strong>Buscar paciente</strong></h2>
               </div>
-
-              <div class="col-lg-3 col-xl-3 col-md-6 col-sm-6">
-                <mat-form-field class="example-full-width" appearance="outline">
-                  <mat-label>Ingresa la edad del paciente en años</mat-label>
-                  <input name="phone" matInput />
-                </mat-form-field>
-              </div>
-
-              <div class="col-lg-3 col-xl-3 col-md-6 col-sm-6">
-                <mat-form-field class="example-full-width" appearance="outline">
-                  <mat-label>Ingresa el peso del paciente en kg</mat-label>
-                  <input name="phone" matInput />
-                </mat-form-field>
-              </div>
-
-              <div class="col-lg-3 col-xl-3 col-md-6 col-sm-6">
-                <mat-form-field class="example-full-width" appearance="outline">
-                  <mat-label>Ingresa la altura del paciente en cm</mat-label>
-                  <input name="phone" matInput />
-                </mat-form-field>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12">
-                <section class="example-list-section">
-                  <mat-checkbox color="primary">Lactancia</mat-checkbox>
-                  <mat-checkbox color="primary">Embarazo</mat-checkbox>
-                </section>
-              </div>
-
-              <div class="col-lg-4 col-xl-4 col-md-6 col-sm-6">
-                <mat-form-field class="example-full-width" appearance="outline">
-                  <mat-label>Ingresa amenorra en semanas</mat-label>
-                  <input name="phone" matInput />
-                </mat-form-field>
-              </div>
-
-              <div class="col-lg-4 col-xl-4 col-md-6 col-sm-6">
-                <mat-form-field class="example-full-width" appearance="outline">
-                  <mat-label
-                    >Ingresa el aclaramiento creatinina en ml/min</mat-label
-                  >
-                  <input name="phone" matInput />
-                </mat-form-field>
-              </div>
-            </div>
-
-            <div class="row m-t-20">
-              <div class="col-lg-4 col-xl-4 col-md-6 col-sm-6 border-right">
-                <div class="row">
-                  <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
-                    <h5 class="align-center border-botton-color">Patologías</h5>
-                  </div>
-
-                  <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12 m-t-20">
-                    <mat-form-field
-                      class="example-full-width"
-                      appearance="outline"
+              <div class="row">
+                <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12">
+                  <mat-form-field appearance="outline" class="example-full-width">
+                    <mat-label>Ingrese el nombre</mat-label>
+                    <input
+                      autocomplete="nope"
+                      aria-autocomplete="none"
+                      (keydown)="searchPatientsByKeyPress($event)"
+                      [(ngModel)]="searchPatients"
+                      [matAutocomplete]="autoPatients"
+                      matInput
+                      appUppercaseNoAccent
+                      name="patients"
+                      type="text"
+                    />
+                    <mat-autocomplete
+                      #autoPatients="matAutocomplete"
+                      (optionSelected)="setSelectedPatient($event.option.value)"
+                      [displayWith]="displayFnPatients"
                     >
-                      <mat-label>Buscar patologias</mat-label>
-                      <input
-                        name="patient-patology"
-                        [(ngModel)]="searchPatologies"
-                        (keydown)="searchPatologiesByKeyPress()"
-                        [matAutocomplete]="autocompletepatology"
-                        matInput
-                      />
-                      <mat-autocomplete
-                        #autocompletepatology="matAutocomplete"
-                        [displayWith]="displayFn"
-                        (optionSelected)="
-                          setSelectedPatology($event.option.value)
-                        "
-                      >
-                        @for (option of patologies; track option) {
+                      @for (option of patients; track option) {
                         <mat-option [value]="option">
-                          {{ option.name }}
+                          {{ option.nombres + ' ' + option.primerApellido + ' ' + option.segundoApellido }}
                         </mat-option>
-                        }
-                      </mat-autocomplete>
-                    </mat-form-field>
-                  </div>
-
-                  <p class="border-botton"></p>
-
-                  <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12 m-t-20">
-                    <mat-list>
-                      <mat-list-item *ngFor="let row of patient.patologias">{{
-                        row
-                      }}</mat-list-item>
-                    </mat-list>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-lg-4 col-xl-4 col-md-6 col-sm-6 border-right">
-                <div class="row">
-                  <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
-                    <h5 class="align-center border-botton-color">Alergias</h5>
-                  </div>
-
-                  <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12 m-t-20">
-                    <mat-form-field
-                      class="example-full-width"
-                      appearance="outline"
-                    >
-                      <mat-label>Buscar alergias</mat-label>
-                      <input
-                        name="search-allergy"
-                        [(ngModel)]="searchAllergies"
-                        (keydown)="searchAllergiesByKeyPress()"
-                        [matAutocomplete]="autocompleteallergies"
-                        matInput
-                      />
-                      <mat-autocomplete
-                        #autocompleteallergies="matAutocomplete"
-                        [displayWith]="displayFn"
-                        (optionSelected)="
-                          setSelectedAllergy($event.option.value)
-                        "
-                      >
-                        @for (option of allergies; track option) {
-                        <mat-option [value]="option">
-                          {{ option.name }}
-                        </mat-option>
-                        }
-                      </mat-autocomplete>
-                    </mat-form-field>
-                  </div>
-
-                  <p class="border-botton"></p>
-
-                  <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12 m-t-20">
-                    <mat-list>
-                      <mat-list-item *ngFor="let row of patient.alergias">{{
-                        row
-                      }}</mat-list-item>
-                    </mat-list>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-lg-4 col-xl-4 col-md-6 col-sm-6">
-                <div class="row">
-                  <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
-                    <h5 class="align-center border-botton-color">Moleculas</h5>
-                  </div>
-
-                  <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12 m-t-20">
-                    <mat-form-field
-                      class="example-full-width"
-                      appearance="outline"
-                    >
-                      <mat-label>Buscar molesculas</mat-label>
-                      <input
-                        name="patient-molescules"
-                        [(ngModel)]="searchMolescule"
-                        (keydown)="searchMolesculesByKeyPress()"
-                        [matAutocomplete]="autocompletemolescules"
-                        matInput
-                      />
-
-                      <mat-autocomplete
-                        #autocompletemolescules="matAutocomplete"
-                        [displayWith]="displayFn"
-                        (optionSelected)="
-                          setSelectedMolecule($event.option.value)
-                        "
-                      >
-                        @for (option of molescules; track option) {
-                        <mat-option [value]="option">
-                          {{ option.name }}
-                        </mat-option>
-                        }
-                      </mat-autocomplete>
-                    </mat-form-field>
-                  </div>
-
-                  <p class="border-botton"></p>
-
-                  <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12 m-t-20">
-                    <mat-list>
-                      <mat-list-item *ngFor="let row of patient.molecules">{{
-                        row
-                      }}</mat-list-item>
-                    </mat-list>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="row m-t-20">
-              <div class="col-lg-4 col-xl-4 col-md-6 col-sm-6 border-right">
-                <div class="row">
-                  <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
-                    <h5 class="align-center border-botton-color">Medicamentos</h5>
-                  </div>
-
-                  <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12 m-t-20">
-                    <mat-form-field
-                      class="example-full-width"
-                      appearance="outline"
-                    >
-                      <mat-label>Buscar medicamentos</mat-label>
-                      <input
-                        name="patient-patology"
-                        [(ngModel)]="searchPatologies"
-                        (keydown)="searchPatologiesByKeyPress()"
-                        [matAutocomplete]="autocompletepatology"
-                        matInput
-                      />
-                      <mat-autocomplete
-                        #autocompletepatology="matAutocomplete"
-                        [displayWith]="displayFn"
-                        (optionSelected)="
-                          setSelectedPatology($event.option.value)
-                        "
-                      >
-                        @for (option of patologies; track option) {
-                          <mat-option [value]="option">
-                            {{ option.name }}
-                          </mat-option>
-                        }
-                      </mat-autocomplete>
-                    </mat-form-field>
-                  </div>
-
-                  <p class="border-botton"></p>
-
-                  <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12 m-t-20">
-                    <mat-list>
-                      <mat-list-item *ngFor="let row of patient.patologias">{{
-                          row
-                        }}</mat-list-item>
-                    </mat-list>
-                  </div>
+                      }
+                    </mat-autocomplete>
+                  </mat-form-field>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      @if (isPatientLoaded) {
+        <div class="row">
+          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="card">
+              <div class="body overflow-auto">
+
+                @if (patientHistoryDataSource.getValue().length > 0) {
+                  <div class="header">
+                    <h2><strong style="color: #1d2671">Antecedentes cronicos del paciente</strong></h2>
+                  </div>
+                  <mat-divider/>
+                  <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                      <div class="card">
+                        <div class="body overflow-auto">
+                          <div class="responsive_table">
+                            <table [dataSource]="patientHistoryDataSource" class="mat-cell advance-table" mat-table
+                                   matSort style="border: 1px solid #1d2671">
+
+                              <ng-container matColumnDef="tipo">
+                                <mat-header-cell *matHeaderCellDef> Tipo</mat-header-cell>
+                                <mat-cell *matCellDef="let row" matTooltip="{{row.drugType}}">
+                                  <span class="mobile-label">Tipo</span>
+                                  {{ row.detailType }}
+                                </mat-cell>
+                              </ng-container>
+
+                              <ng-container matColumnDef="nombre">
+                                <mat-header-cell *matHeaderCellDef> Nombre</mat-header-cell>
+                                <mat-cell *matCellDef="let row" matTooltip="{{row.drug}}">
+                                  <span class="mobile-label">Nombre</span>
+                                  {{ row.detailTypeName }}
+                                </mat-cell>
+                              </ng-container>
+
+                              <ng-container matColumnDef="idCode">
+                                <mat-header-cell *matHeaderCellDef> Codigo</mat-header-cell>
+                                <mat-cell *matCellDef="let row" matTooltip="{{row.unitId}}">
+                                  <span class="mobile-label">Codigo / Id</span>
+                                  {{ row.detailTypeCode }}
+                                </mat-cell>
+                              </ng-container>
+
+                              <mat-header-row *matHeaderRowDef="displayedColumnsHistory"></mat-header-row>
+                              <mat-row *matRowDef="let row; columns: displayedColumnsHistory;" matRipple></mat-row>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                }
+
+                <div class="header">
+                  <h2><strong>Perfil del paciente</strong></h2>
+                </div>
+                <mat-divider/>
+                <form [formGroup]="prescriptionForm" class="register-form m-4">
+                  <div class="row">
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                      <mat-form-field appearance="outline" class="example-full-width">
+                        <mat-label>Género</mat-label>
+                        <mat-select (selectionChange)="onGenderChange($event.value)" formControlName="gender" required>
+                          <mat-option value="FEMALE">FEMENINO</mat-option>
+                          <mat-option value="MALE">MASCULINO</mat-option>
+                        </mat-select>
+                        @if (prescriptionForm.get('gender')?.hasError('required')) {
+                          <mat-error>{{ getErrorMessage() }}</mat-error>
+                        }
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                      <mat-form-field appearance="outline" class="example-full-width">
+                        <mat-label>Edad</mat-label>
+                        <input
+                          aria-autocomplete="none"
+                          (input)="onAgeInput($event)"
+                          autocomplete="nope"
+                          formControlName="age"
+                          matInput
+                          appUppercaseNoAccent
+                          required
+                          type="number"
+                        />
+                        <span matSuffix>Años &nbsp;</span>
+                        @if (prescriptionForm.get('age')?.hasError('required')) {
+                          <mat-error>{{ getErrorMessage() }}</mat-error>
+                        }
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                      <mat-form-field appearance="outline" class="example-full-width">
+                        <mat-label>Peso</mat-label>
+                        <input
+                          aria-autocomplete="none"
+                          autocomplete="nope"
+                          formControlName="weight"
+                          matInput
+                          required
+                          type="number"
+                        />
+                        <span matSuffix>kg &nbsp;</span>
+                        @if (prescriptionForm.get('weight')?.hasError('required')) {
+                          <mat-error>{{ getErrorMessage() }}</mat-error>
+                        }
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                      <mat-form-field appearance="outline" class="example-full-width">
+                        <mat-label>Altura</mat-label>
+                        <input
+                          autocomplete="nope"
+                          aria-autocomplete="none"
+                          formControlName="height"
+                          matInput
+                          required
+                          type="number"
+                        />
+                        <span matSuffix>cm &nbsp;</span>
+                        @if (prescriptionForm.get('height')?.hasError('required')) {
+                          <mat-error>{{ getErrorMessage() }}</mat-error>
+                        }
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                      <mat-form-field appearance="outline" class="example-full-width">
+                        <mat-label>Aclaramiento Creatinina</mat-label>
+                        <input
+                          aria-autocomplete="none"
+                          autocomplete="nope"
+                          formControlName="creatin"
+                          matInput
+                          type="number"
+                        />
+                        <span matSuffix>ml/min &nbsp;</span>
+                        @if (prescriptionForm.get('creatin')?.hasError('required')) {
+                          <mat-error>{{ getErrorMessage() }}</mat-error>
+                        }
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12" [hidden]="!isPregnant">
+                      <mat-form-field appearance="outline" class="example-full-width">
+                        <mat-label>Amenorrea</mat-label>
+                        <input
+                          autocomplete="nope"
+                          aria-autocomplete="none"
+                          [min]="prescriptionForm.get('pregnancy')?.value ? 1 : null"
+                          formControlName="weeksOfAmenorrhea"
+                          matInput
+                          required
+                          type="number"
+                        />
+                        <span matSuffix>semanas &nbsp;</span>
+                        @if (prescriptionForm.get('weeksOfAmenorrhea')?.hasError('required')) {
+                          <mat-error>{{ getErrorMessage() }}</mat-error>
+                        }
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 checkbox-container" [hidden]="isGenderRestricted">
+                      <mat-checkbox class="custom-checkbox" formControlName="pregnancy">
+                        Embarazo
+                      </mat-checkbox>
+                      <mat-checkbox
+                        class="custom-checkbox"
+                        [hidden]="isGenderRestricted"
+                        (change)="onBreastFeedingChange($event)"
+                        [checked]="prescriptionForm.get('breastFeeding')?.value === 'ALL'"
+                        formControlName="breastFeeding">
+                        Lactancia
+                      </mat-checkbox>
+                    </div>
+                  </div>
+
+                  <mat-divider/>
+
+                  <div class="row mt-3">
+                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                      <div class="row">
+                        <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
+                          <h5 class="align-center border-botton-color">Patologías</h5>
+                        </div>
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                          <mat-form-field appearance="outline" class="example-full-width">
+                            <mat-label>Buscar Patologias</mat-label>
+                            <input
+                              autocomplete="nope"
+                              aria-autocomplete="none"
+                              (keydown)="searchPatologiesByKeyPress($event)"
+                              [matAutocomplete]="autoPatologies"
+                              formControlName="searchPatologies"
+                              matInput
+                              type="text"
+                            />
+                            <mat-autocomplete
+                              #autoPatologies="matAutocomplete"
+                              (optionSelected)="setSelectedPatology($event.option.value)"
+                              [displayWith]="displayFnPatologies"
+                            >
+                              @for (option of patologies; track option) {
+                                <mat-option [value]="option">
+                                  {{ option.nameCIM10 }}
+                                </mat-option>
+                              }
+                            </mat-autocomplete>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                      <div class="row">
+                        <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
+                          <h5 class="align-center border-botton-color">Alergias</h5>
+                        </div>
+
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                          <mat-form-field appearance="outline" class="example-full-width">
+                            <mat-label>Buscar Alergias</mat-label>
+                            <input
+                              autocomplete="nope"
+                              aria-autocomplete="none"
+                              (keydown)="searchAllergiesByKeyPress($event)"
+                              [matAutocomplete]="autoAlergias"
+                              formControlName="searchAllergies"
+                              matInput
+                              name="allergies"
+                              type="text"
+                            />
+                            <mat-autocomplete
+                              #autoAlergias="matAutocomplete"
+                              (optionSelected)="setSelectedAllergy($event.option.value)"
+                              [displayWith]="displayFnAllergy"
+                            >
+                              @for (option of allergies; track option) {
+                                <mat-option [value]="option">
+                                  {{ option.nameAllergy }}
+                                </mat-option>
+                              }
+                              @for (option of molescules; track option) {
+                                <mat-option [value]="option">
+                                  {{ option.nameMolecule }}
+                                </mat-option>
+                              }
+                            </mat-autocomplete>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                          <mat-checkbox (change)="clearAlergies()" formControlName="searchAllergiesChecked">Alergias
+                          </mat-checkbox>
+                          <mat-checkbox (change)="clearAlergies()" formControlName="searchMoleculesChecked">Moléculas
+                          </mat-checkbox>
+                        </div>
+                      </div>
+                    </div>
+                    @if (patientDataSource.getValue().length > 0) {
+                      <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                          <div class="card">
+                            <div class="body overflow-auto">
+                              <div class="responsive_table">
+                                <table [dataSource]="patientDataSource" class="mat-cell advance-table" mat-table
+                                       matSort>
+
+                                  <ng-container matColumnDef="tipo">
+                                    <mat-header-cell *matHeaderCellDef> Tipo</mat-header-cell>
+                                    <mat-cell *matCellDef="let row" matTooltip="{{row.drugType}}">
+                                      <span class="mobile-label">Tipo</span>
+                                      {{ row.detailType }}
+                                    </mat-cell>
+                                  </ng-container>
+
+                                  <ng-container matColumnDef="nombre">
+                                    <mat-header-cell *matHeaderCellDef> Nombre</mat-header-cell>
+                                    <mat-cell *matCellDef="let row" matTooltip="{{row.drug}}">
+                                      <span class="mobile-label">Nombre</span>
+                                      {{ row.detailTypeName }}
+                                    </mat-cell>
+                                  </ng-container>
+
+                                  <ng-container matColumnDef="cronico">
+                                    <mat-header-cell *matHeaderCellDef> Cronico?</mat-header-cell>
+                                    <mat-cell *matCellDef="let row">
+                                      <mat-checkbox (click)="$event.stopPropagation()"
+                                                    (change)="$event ? selection.toggle(row) : null"
+                                                    [checked]="selection.isSelected(row)" [ngClass]="'tbl-checkbox'">
+                                      </mat-checkbox>
+                                    </mat-cell>
+                                  </ng-container>
+
+                                  <ng-container matColumnDef="idCode">
+                                    <mat-header-cell *matHeaderCellDef> Codigo</mat-header-cell>
+                                    <mat-cell *matCellDef="let row" matTooltip="{{row.unitId}}">
+                                      <span class="mobile-label">Codigo / Id</span>
+                                      {{ row.detailTypeCode }}
+                                    </mat-cell>
+                                  </ng-container>
+
+                                  <ng-container matColumnDef="actions">
+                                    <mat-header-cell *matHeaderCellDef class="pr-0">Actions</mat-header-cell>
+                                    <mat-cell *matCellDef="let row; let i=index;" class="pr-0">
+                                      <button (click)="$event.stopPropagation(); deletePatientLine(i)"
+                                              class="tbl-action-btn"
+                                              mat-icon-button>
+                                        <app-feather-icons [class]="'tbl-fav-delete'"
+                                                           [icon]="'trash-2'"></app-feather-icons>
+                                      </button>
+                                    </mat-cell>
+                                  </ng-container>
+
+                                  <mat-header-row *matHeaderRowDef="displayedColumnsPatients"></mat-header-row>
+                                  <mat-row *matRowDef="let row; columns: displayedColumnsPatients;" matRipple></mat-row>
+                                </table>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    }
+                  </div>
+                  <mat-divider/>
+                  @if (prescriptionForm.get('height')?.value && prescriptionForm.get('weight')?.value; ) {
+                    <div class="row mt-3">
+                      <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                        <div class="row">
+                          <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
+                            <h5 class=" border-botton-color">Medicamentos</h5>
+                          </div>
+
+                          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                            <mat-form-field appearance="outline" class="example-full-width">
+                              <mat-label>Buscar Medicamentos</mat-label>
+                              <input
+                                autocomplete="nope"
+                                aria-autocomplete="none"
+                                (keydown)="searchMedicamentsByKeyPress($event)"
+                                [matAutocomplete]="autoMedicaments"
+                                formControlName="searchMedicaments"
+                                matInput
+                                name="medicaments"
+                                type="text"
+                              />
+                              <mat-autocomplete
+                                #autoMedicaments="matAutocomplete"
+                                (optionSelected)="setSelectedMedicamente($event.option.value)"
+                                [displayWith]="displayFnMedicaments"
+                              >
+                                @for (option of medicaments; track option) {
+                                  <mat-option [value]="option">
+                                    {{ option.nombre }}
+                                  </mat-option>
+                                }
+                              </mat-autocomplete>
+                            </mat-form-field>
+                          </div>
+                          <p class="border-botton"></p>
+                        </div>
+                      </div>
+                      @if (alertasControl) {
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                          <div class="row">
+                            <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
+                              <h5 style="color:red" class=" border-botton-color">Alertas</h5>
+                            </div>
+
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                              <div class="example-button-container">
+                                <button mat-fab extended style="background-color: red; color: whitesmoke; width: 20em"
+                                        (click)="openPrescriptionLineModal()">
+                                  <mat-icon>error_outline</mat-icon>
+                                  {{ alertasControl }} {{ alertasControl == 1 ? 'Advertencia' : 'Advertencias' }}
+                                </button>
+                              </div>
+                            </div>
+                            <p class="border-botton"></p>
+                          </div>
+                        </div>
+                      }
+
+                      @if (prescription.medicamentos.length > 0) {
+                        <div class="row">
+                          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div class="card">
+                              <div class="body overflow-auto">
+                                <div class="responsive_table">
+                                  <table [dataSource]="prescriptionDataSource" class="mat-cell advance-table" mat-table
+                                         matSort>
+
+                                    <ng-container matColumnDef="drugType">
+                                      <mat-header-cell *matHeaderCellDef> Tipo</mat-header-cell>
+                                      <mat-cell *matCellDef="let row" matTooltip="{{row.drugType}}">
+                                        <span class="mobile-label">Tipo</span>
+                                        {{ row.drugType }}
+                                      </mat-cell>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="drug">
+                                      <mat-header-cell *matHeaderCellDef> Medicamento</mat-header-cell>
+                                      <mat-cell *matCellDef="let row" matTooltip="{{row.drug}}">
+                                        <span class="mobile-label">Medicamento</span>
+                                        {{ row.name }}
+                                      </mat-cell>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="dose">
+                                      <mat-header-cell *matHeaderCellDef> Dosis</mat-header-cell>
+                                      <mat-cell *matCellDef="let row" matTooltip="{{row.dose}}">
+                                        <span class="mobile-label">Dosis</span>
+                                        {{ row.dose }} {{ row.unitIdName }}
+                                      </mat-cell>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="frecuency">
+                                      <mat-header-cell *matHeaderCellDef> Frecuencia</mat-header-cell>
+                                      <mat-cell *matCellDef="let row" matTooltip="{{row.frecuency}}">
+                                        <span class="mobile-label">Frecuencia</span>
+                                        {{ row.frecuency }}
+                                      </mat-cell>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="duration">
+                                      <mat-header-cell *matHeaderCellDef> Duracion</mat-header-cell>
+                                      <mat-cell *matCellDef="let row" matTooltip="{{row.durationName}}">
+                                        <span class="mobile-label">Duracion</span>
+                                        {{ row.duration }} {{ row.durationName }}
+                                      </mat-cell>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="route">
+                                      <mat-header-cell *matHeaderCellDef> Via</mat-header-cell>
+                                      <mat-cell *matCellDef="let row" matTooltip="{{row.routeName}}">
+                                        <span class="mobile-label">Via</span>
+                                        {{ row.routeName }}
+                                      </mat-cell>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="indication">
+                                      <mat-header-cell *matHeaderCellDef> Motivo</mat-header-cell>
+                                      <mat-cell *matCellDef="let row" matTooltip="{{row.indication}}">
+                                        <span class="mobile-label">Motivo</span>
+                                        {{ row.indicationName }}
+                                      </mat-cell>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="obs">
+                                      <mat-header-cell *matHeaderCellDef> Indicaciones</mat-header-cell>
+                                      <mat-cell *matCellDef="let row" matTooltip="{{row.obs}}">
+                                        <span class="mobile-label">Indicaciones</span>
+                                        {{ row.obs }}
+                                      </mat-cell>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="actions">
+                                      <mat-header-cell *matHeaderCellDef class="pr-0">Actions</mat-header-cell>
+                                      <mat-cell *matCellDef="let row; let i=index;" class="pr-0">
+                                        <button (click)="$event.stopPropagation(); updateLine(row, i)"
+                                                class="tbl-action-btn"
+                                                mat-icon-button>
+                                          <app-feather-icons [class]="'tbl-fav-edit'"
+                                                             [icon]="'droplet'"></app-feather-icons>
+                                        </button>
+                                        <button (click)="$event.stopPropagation(); deleteLine(i)" class="tbl-action-btn"
+                                                mat-icon-button>
+                                          <app-feather-icons [class]="'tbl-fav-delete'"
+                                                             [icon]="'trash-2'"></app-feather-icons>
+                                        </button>
+                                      </mat-cell>
+                                    </ng-container>
+
+                                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                                    <mat-row *matRowDef="let row; columns: displayedColumns;" matRipple></mat-row>
+                                  </table>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      }
+                    </div>
+                  }
+                </form>
+                @if (prescriptionForm.get('height')?.value && prescriptionForm.get('weight')?.value; ) {
+                  <div class="row">
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                      <button (click)="confirmAdd()" color="primary" mat-raised-button>Confimar</button>
+                    </div>
+                    @if (analysisBacked) {
+                      <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                        <button (click)="crearReceta()" color="warn" mat-raised-button>Crear Receta</button>
+                      </div>
+                    }
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+      }
     </div>
-  </div>
-</section>
+  </section>
+}
+@if (dataLoaded) {
+  <section class="content">
+    <div class="content-block">
+      <div class="back-button mt-5" (click)="backToDefault() ">
+        <mat-icon class="icon">arrow_back</mat-icon>
+        <span>Regresar</span>
+      </div>
+
+      <div class="iframe-container mt-2">
+        <iframe
+          #iframe
+          class="iframe-content"
+          sandbox="allow-same-origin allow-scripts"
+        ></iframe>
+      </div>
+    </div>
+  </section>
+}
+

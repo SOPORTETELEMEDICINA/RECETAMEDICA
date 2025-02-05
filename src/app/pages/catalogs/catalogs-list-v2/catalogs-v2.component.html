@@ -1,0 +1,54 @@
+<section class="content">
+  <div class="content-block">
+    <div class="block-header">
+      <app-breadcrumb
+        [active_item]="'Catalogos V2'"
+        [items]="['Catalogos']"
+        [title]="'Configuración'"
+      ></app-breadcrumb>
+    </div>
+
+    <app-top-widgets/>
+
+    <div class="row clearfix">
+      <div class="col-lg-12 col-md-12">
+        <div class="card">
+          <mat-tab-group>
+
+            <mat-tab>
+              <ng-template mat-tab-label>
+                <mat-icon class="example-tab-icon msr-2">supervised_user_circle</mat-icon>
+                Tipos de Usuario
+              </ng-template>
+              <ng-template matTabContent>
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                  <div class="project_widget">
+                    <div class="body">
+                      <app-user-type></app-user-type>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </mat-tab>
+
+            <mat-tab>
+              <ng-template mat-tab-label>
+                <mat-icon class="example-tab-icon msr-2">business_center</mat-icon>
+                Grupos
+              </ng-template>
+              <ng-template matTabContent>
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                  <div class="project_widget">
+                    <div class="body">
+                      <app-groups></app-groups>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </mat-tab>
+          </mat-tab-group>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

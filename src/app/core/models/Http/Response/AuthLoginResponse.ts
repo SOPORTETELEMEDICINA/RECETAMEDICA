@@ -1,4 +1,4 @@
-import { UserDetails } from './../../UserDetails';
+import {UserDetails} from './../../UserDetails';
 
 export class AuthLoginResponse {
   token!: string;

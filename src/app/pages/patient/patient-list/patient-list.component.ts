@@ -1,154 +1,191 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  UntypedFormGroup,
-} from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatOptionModule } from '@angular/material/core';
-import { MatSelectModule } from '@angular/material/select';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { BreadcrumbComponent } from '@shared/components/breadcrumb/breadcrumb.component';
-import { PatientEditCreateComponent } from './patient-edit-create/patient-edit-create.component';
-
-import {
-  DatatableComponent,
-  SortType,
-  NgxDatatableModule,
-} from '@swimlane/ngx-datatable';
-import { User } from '@core/models/User';
-import { MatDialog } from '@angular/material/dialog';
-import { AdminService } from '@core/http/admin.service';
-import { DefaultResponse } from '@core/models/Http/DefaultResponse';
-import { UserDetails } from '@core/models/UserDetails';
-import {NgClass, NgFor} from '@angular/common';
-import {PatientDetails} from "@core/models/PatientDetails";
-import {FeatherIconsComponent} from "@shared/components/feather-icons/feather-icons.component";
+import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {PatientService} from '@core/http/patient.service';
+import {HttpClient} from '@angular/common/http';
+import {MatDialog} from '@angular/material/dialog';
+import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
+import {MatSort, MatSortModule} from '@angular/material/sort';
+import {fromEvent} from 'rxjs';
+import {TableElement, TableExportUtil, UnsubscribeOnDestroyAdapter,} from '@shared';
+import {formatDate, NgIf, NgOptimizedImage} from '@angular/common';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatRippleModule} from '@angular/material/core';
+import {FeatherIconsComponent} from '@shared/components/feather-icons/feather-icons.component';
+import {MatTableModule} from '@angular/material/table';
+import {MatIconModule} from '@angular/material/icon';
+import {MatButtonModule} from '@angular/material/button';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import {BreadcrumbComponent} from '@shared/components/breadcrumb/breadcrumb.component';
+import {BusinessGroupService} from "@core/service/business-group.service";
+import {PatientDataSource} from "@core/data-source/PatientDataSource";
+import {GeneralFunctionsService} from "@core/service/generalFunctions.service";
+import {Patient} from "@core/models/Patient";
+import {DoDeleteComponent} from "@shared/components/do-delete/do-delete.component";
+import {Router} from "@angular/router";
+import {FormatMobilePipe} from "@core/pipes/format-mobile.pipe";
+import {PatientDiagnosticsComponent} from "./patient-diagnostics/patient-diagnostics.component";
+import {auto} from "@popperjs/core";
+import {AuthManagementService} from "@core/service/auth-management.service";
+import {TopWidgetsComponent} from "@shared/components/top-widgets/top-widgets.component";
 
 @Component({
   selector: 'app-patient-list',
+  templateUrl: './patient-list.component.html',
+  styleUrl: './patient-list.component.scss',
   standalone: true,
   imports: [
     BreadcrumbComponent,
+    MatTooltipModule,
     MatButtonModule,
     MatIconModule,
-    NgxDatatableModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatOptionModule,
-    NgFor,
+    MatTableModule,
+    MatSortModule,
     FeatherIconsComponent,
-    NgClass,
+    MatRippleModule,
+    MatProgressSpinnerModule,
+    MatPaginatorModule,
+    NgOptimizedImage,
+    FormatMobilePipe,
+    NgIf,
+    TopWidgetsComponent
   ],
-  templateUrl: './patient-list.component.html',
-  styleUrl: './patient-list.component.scss',
 })
-export class PatientListComponent implements OnInit {
-  @ViewChild(DatatableComponent, { static: false }) table2!: DatatableComponent;
-  @ViewChild(DatatableComponent, { static: false }) table!: DatatableComponent;
 
-  SortType = SortType;
-  register?: UntypedFormGroup;
+export class PatientListComponent
+  extends UnsubscribeOnDestroyAdapter
+  implements OnInit {
 
-  selectedRowData?: selectRowInterface;
+  isUserDoctor: boolean = false;
+  isUserAdmin: boolean = false;
 
-  columns = [
-    { prop: 'nombres', name: 'Nombre' },
-    { prop: 'domicilio', name: 'Domicilio' },
-    { prop: 'fechaNacimiento', name: 'Fecha de Nacimiento' },
-    { prop: 'email', name: 'Correo' },
-    { prop: 'movil', name: 'Telefono' },
-    { prop: 'status', name: 'Estatus' },
+  displayedColumns = [
+    'name',
+    'bDate',
+    'email',
+    'mobile',
+    'status',
+    'antecedentes',
+    'actions',
   ];
 
-  data: PatientDetails[] = [];
-  filteredData: PatientDetails[] = [];
+  data?: PatientService;
+  dataSource!: PatientDataSource;
+  index?: number;
+  idPaciente?: string;
+  patient?: Patient;
+  businessGroupId: string | null = null;
+  @ViewChild(MatPaginator, {static: true})
+  paginator!: MatPaginator;
+  @ViewChild(MatSort, {static: true})
+  sort!: MatSort;
+  @ViewChild('filter', {static: true}) filter?: ElementRef;
+  @Input() control: number = 1;
 
   constructor(
-    private dialogModel: MatDialog,
-    private adminService: AdminService
-  ) {}
-
-  ngOnInit(): void {
-    this.getUsers();
+    public httpClient: HttpClient,
+    public dialog: MatDialog,
+    private router: Router,
+    public patientService: PatientService,
+    private authManagement: AuthManagementService,
+    private businessGroupService: BusinessGroupService,
+    private gfs: GeneralFunctionsService
+  ) {
+    super();
   }
 
-  filterDatatable(event: any) {
-    // obtener el valor del input y convertirlo a minúsculas
-    const val = event.target.value.toLowerCase();
-
-    // si no hay valor en el input, restaurar todos los datos
-    if (!val) {
-      this.data = [...this.filteredData]; // restaurar los datos originales
-      this.table.offset = 0; // regresar a la primera página
-
-      console.log(this.data);
-
-      return;
-    }
-
-    // obtener los nombres de las claves de cada columna en el dataset
-    const keys = Object.keys(this.data[0]);
-
-    // asignar los resultados filtrados al datatable activo
-    this.data = this.filteredData.filter((item: any) => {
-      // iterar sobre los datos de cada columna en la fila
-      for (let key of keys) {
-        const value = item[key];
-        // verificar si hay una coincidencia
-        if (value && value.toString().toLowerCase().indexOf(val) !== -1) {
-          return true; // se encontró coincidencia, mantener el registro
-        }
-      }
-      return false; // no hay coincidencia, eliminar el registro
+  ngOnInit() {
+    this.businessGroupService.businessGroupId$.subscribe((id) => {
+      this.businessGroupId = id;
+      this.loadData();
     });
-
-    // siempre regresar a la primera página cuando el filtro cambie
-    this.table.offset = 0;
+    this.isUserDoctor = this.authManagement.isUserDoctor();
+    this.isUserAdmin = this.authManagement.isUserAdmin();
   }
 
-  getUsers() {
-    this.adminService.getPatients().subscribe({
-      next: (res: DefaultResponse<PatientDetails[]>) => {
-        this.data = [...res.data];
-        this.filteredData = [...res.data];
+  refresh() {
+    this.ngOnInit();
+  }
+
+  addNew() {
+    this.router.navigate(['patient/create-edit']).then();
+  }
+
+  editCall(row: Patient) {
+    this.router.navigate(['patient/create-edit/' + row.idUsuario]).then();
+  }
+
+  goToProfile(row: Patient) {
+    this.router.navigate(['patient/profile/' + row.idUsuario]).then();
+  }
+
+  showDiagnostics(row: Patient) {
+    this.dialog.open(PatientDiagnosticsComponent, {
+      width: '800px',
+      height: auto,
+      data: {
+        diagnostics: row,
       },
     });
   }
 
-  deleteRow(row: PatientDetails) {
-    this.data = this.arrayRemove(this.data, row.idUsuario);
-  }
+  deleteItem(row: Patient) {
+    this.idPaciente = row.idPaciente;
 
-  arrayRemove(array: PatientDetails[], id: string) {
-    return array.filter(function (element: PatientDetails) {
-      return element.idUsuario != id;
+    const dialogRef = this.dialog.open(DoDeleteComponent, {
+      data: {
+        toDelete: 'Paciente',
+        id: this.idPaciente,
+        name: row.nombres,
+        actionService: (id: string) => this.patientService.deletePatient(id),
+      }
+    });
+    this.subs.sink = dialogRef.afterClosed().subscribe((result) => {
+      if (result === 1) {
+        const foundIndex = this.data?.dataChange.value.findIndex(
+          (x): boolean => x.idPaciente === this.idPaciente
+        );
+        if (foundIndex != null && this.data) {
+          this.data.dataChange.value.splice(foundIndex, 1);
+
+          this.refreshTable();
+          this.gfs.showAlert('Paciente eliminado correctamente', 'Correcto')
+        }
+      }
     });
   }
 
-  openUserModal() {
-    this.dialogModel
-      .open(PatientEditCreateComponent, {
-        disableClose: true,
-        maxWidth: '100vw',
-        maxHeight: '100vw',
-        width: '850px',
-        height: '850px',
-      })
-      .afterClosed()
-      .subscribe((res) => {
-        if (res) this.getUsers();
-      });
+  exportExcel() {
+    const exportData: Partial<TableElement>[] =
+      this.dataSource.filteredData.map((x: Patient) => ({
+        Nombre: x.nombres,
+        Genero: x.genero,
+        Edad: x.edad,
+        'Fecha de nacimiento': formatDate(new Date(x.fechaNacimiento), 'yyyy-MM-dd', 'en') || '',
+        Correo: x.email,
+        Telefono: x.movil,
+        Estatus: x.status
+      }));
+    TableExportUtil.exportToExcel(exportData, 'excel');
   }
-}
 
-export interface selectRowInterface {
-  img: string;
-  firstName: string;
-  lastName: string;
+  public loadData() {
+    this.data = new PatientService(this.httpClient, this.gfs);
+    this.dataSource = new PatientDataSource(
+      this.businessGroupId,
+      this.data,
+      this.paginator,
+      this.sort
+    );
+    this.subs.sink = fromEvent(this.filter?.nativeElement, 'keyup').subscribe(
+      () => {
+        if (!this.dataSource) {
+          return;
+        }
+        this.dataSource.filter = this.filter?.nativeElement.value;
+      }
+    );
+  }
+
+  private refreshTable() {
+    this.paginator._changePageSize(this.paginator.pageSize);
+  }
 }
